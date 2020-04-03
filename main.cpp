@@ -3,6 +3,6 @@
 #include <iostream>
 
 int main() {
-    getOpcode("34");
-    cout << "Hello World!";
+    cout<<Opcode::getInstruction(Opcode::findOpcode("84"));
+    //cout << "Hello World!";
 }

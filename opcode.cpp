@@ -102,30 +102,137 @@ const struct opcodes opcode_table[] = {
   {"DC", "WD", "3/4"}
 };
 
+int hexToInt(string value){
+    int num = 0;
+    int pow16 = 1;
+
+    string alpha = "0123456789ABCDEF";
+    for(int i = value.length() - 1; i >= 0; --i)
+    {
+        num += alpha.find(toupper(value[i])) * pow16;
+        pow16 *= 16;
+    }
+    return num;
+};
+
+// Take in 1 int and return Binary number as a string.
+string hexToStringBin(unsigned long value) {
+    if(value == 0)
+        return "0000";
+    else if(value == 1)
+        return "0001";
+    else if(value == 2)
+        return "0010";
+    else if(value == 3)
+        return "0011";
+    else if(value == 4)
+        return "0100";
+    else if(value == 5)
+        return "0101";
+    else if(value == 6)
+        return "0110";
+    else if(value == 7)
+        return "0111";
+    else if(value == 8)
+        return "1000";
+    else if(value == 9)
+        return "1001";
+    else if(value == 0x0A)
+        return "1010";
+    else if(value == 0x0B)
+        return "1011";
+    else if(value == 0x0C)
+        return "1100";
+    else if(value == 0x0D)
+        return "1101";
+    else if(value == 0x0E)
+        return "1110";
+    else if (value == 0x0F)
+        return "1111";
+    printf("Opcode Error!\n");
+    exit(EXIT_FAILURE);
+};
+
+//Take in a 4 binary number as a string and return an integer (decimal)
+string binToHex(string value){
+    if(value.compare("0000")==0)
+        return "0";
+    else if(value.compare("0001")==0)
+        return "1";
+    else if(value.compare("0010")==0)
+        return "2";
+    else if(value.compare("0011")==0)
+        return "3";
+    else if(value.compare("0100")==0)
+        return "4";
+    else if(value.compare("0101")==0)
+        return "5";
+    else if(value.compare("0110")==0)
+        return "6";
+    else if(value.compare("0111")==0)
+        return "7";
+    else if(value.compare("1000")==0)
+        return "8";
+    else if(value.compare("1001")==0)
+        return "9";
+    else if(value.compare("1010")==0)
+        return "A";
+    else if(value.compare("1011")==0)
+        return "B";
+    else if(value.compare("1100")==0)
+        return "C";
+    else if(value.compare("1101")==0)
+        return "D";
+    else if(value.compare("1110")==0)
+        return "E";
+    else if(value.compare("1111")==0)
+        return "F";
+    printf("Invalided Input!\n");
+    exit(EXIT_FAILURE);
+};
+
 // Take the first 2 hex digits of the instruction as string
 // Return the true opcode as string.
 string getOpcode(string opcodes) {
-    string first_digit_str;
-    string str_last_digit;
-    int int_last_digit;
-    string binary_last_digit;
-    string binary_str_with_n_and_i_flag_off;
-    string first_2_binary_digit;
-    string last_digit_opcode_in_str;
-    string both_opcode_digit = "hello marina";
+    int    secondInt;
+    string first2Bin;
+    string firstHex;
+    string mod2HexBin;
+    string secondBin;
+    string secondHex;
+    string translated_opcode;
+    string translatedSecondHex;
 
-    // first_digit_str = opcodes.substr(0,1);   // grab the first digit of the opcode
-    // str_last_digit = opcodes.substr(1,1);    // grab the secondd digit of the opcode
+    firstHex = opcodes.substr(0,1);   // grab the first digit of the opcode
+    secondHex = opcodes.substr(1,1);    // grab the secondd digit of the opcode
 
-    // int_last_digit = Converter::stringHexToInt(str_last_digit);             // convert the last string digit to integer
-    // binary_last_digit = Converter::hexToStringBinary(int_last_digit);       // convert the last integer digit to 4 a binary number
+    secondInt = hexToInt(secondHex);             // convert the last string digit to integer
+    secondBin = hexToStringBin(secondInt);       // convert the last integer digit to 4 a binary number
 
-    // first_2_binary_digit = (char *)binary_last_digit.substr(0,2).c_str();   // grab the first 2 binary digits
-    // binary_str_with_n_and_i_flag_off = strcat((char *)first_2_binary_digit.c_str(), "00"); // combine the first 2 binary digit with "00"
-    // last_digit_opcode_in_str = Converter::stringBinToHex(binary_str_with_n_and_i_flag_off);// convert the combined 4 binary digits to hex
+    first2Bin = (char *)secondBin.substr(0,2).c_str();   // grab the first 2 binary digits
+    mod2HexBin = strcat((char *)first2Bin.c_str(), "00"); // combine the first 2 binary digit with "00"
+    translatedSecondHex = binToHex(mod2HexBin);// convert the combined 4 binary digits to hex
 
-    // both_opcode_digit = strcat((char *)first_digit_str.c_str(),(char *)last_digit_opcode_in_str.c_str()); // combime both opcode digits after conversion
+    translated_opcode = strcat((char *)firstHex.c_str(),(char *)translatedSecondHex.c_str()); // combime both opcode digits after conversion
 
-    // return both_opcode_digit;
-    return opcodes;
+    return translated_opcode;
+   
+    // return opcodes;
 };
+
+// Return index of the opcode if it is in the optab. -1 if its not
+int Opcode::findOpcode(string value){
+    for (int i = 0; i <= 57; i++) {
+        if (opcode_table[i].hex.compare(value) == 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+// Returns the Instruction name of the Opcode with given location of Opcode inputted
+string Opcode::getInstruction(int optabIndex){
+    string instructionName;
+    instructionName = opcode_table[optabIndex].name;
+    return instructionName;
+}
