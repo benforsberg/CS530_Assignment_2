@@ -231,8 +231,8 @@ int Opcode::findOpcode(string value){
 }
 
 // Returns the Instruction name from the opcode_table given the index from the opcode_table 
-string Opcode::getInstruction(int optabIndex){
+string Opcode::getInstruction(int opcode_table_index){
     string instructionName;
-    instructionName = opcode_table[optabIndex].name;
+    instructionName = opcode_table[opcode_table_index].name;
     return instructionName;
 }
