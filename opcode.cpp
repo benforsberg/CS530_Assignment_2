@@ -12,10 +12,11 @@ Filename of this file: README
 #include <sstream>
 #include <stdlib.h>
 
-#include "opcode.h"
+#include "Opcode.h"
+using namespace std;
 
 /*structure to store opcodes*/
-struct opcode {
+struct opcodes{
     std::string hex;
     std::string name;
     std::string formats;
@@ -27,7 +28,7 @@ struct registers{
     std::string number;
 };
 
-const struct registers registers_map[] {
+const struct registers registers_map[] = {
     { "A", "0" },
     { "X", "1" },
     { "L", "2" },
@@ -39,7 +40,7 @@ const struct registers registers_map[] {
     { "SW", "9" }
 };
 
-const struct opcode opcode_table [] = {
+const struct opcodes opcode_table[] = {
   {"18", "ADD", "3/4" },
   {"58", "ADDF", "3/4"},
   {"90", "ADDR", "2"},
@@ -103,27 +104,28 @@ const struct opcode opcode_table [] = {
 
 // Take the first 2 hex digits of the instruction as string
 // Return the true opcode as string.
-std::string opcode::getOpcode(std::string opcode) {
-    int    secondInt;
-    std::string first2Bin;
-    std::string firstHex;
-    std::string mod2HexBin;
-    std::string secondBin;
-    std::string secondHex;
-    std::string translated_opcode;
-    std::string translatedSecondHex;
+string getOpcode(string opcodes) {
+    string first_digit_str;
+    string str_last_digit;
+    int int_last_digit;
+    string binary_last_digit;
+    string binary_str_with_n_and_i_flag_off;
+    string first_2_binary_digit;
+    string last_digit_opcode_in_str;
+    string both_opcode_digit = "hello marina";
 
-    firstHex = opcode.substr(0,1);   // grab the first digit of the opcode
-    secondHex = opcode.substr(1,1);    // grab the secondd digit of the opcode
+    // first_digit_str = opcodes.substr(0,1);   // grab the first digit of the opcode
+    // str_last_digit = opcodes.substr(1,1);    // grab the secondd digit of the opcode
 
-    // secondInt = Converter::hexToInt(secondHex);             // convert the last string digit to integer
-    // secondBin = Converter::hexToStringBin(secondInt);       // convert the last integer digit to 4 a binary number
+    // int_last_digit = Converter::stringHexToInt(str_last_digit);             // convert the last string digit to integer
+    // binary_last_digit = Converter::hexToStringBinary(int_last_digit);       // convert the last integer digit to 4 a binary number
 
-    // first2Bin = (char *)secondBin.substr(0,2).c_str();   // grab the first 2 binary digits
-    // mod2HexBin = strcat((char *)first2Bin.c_str(), "00"); // combine the first 2 binary digit with "00"
-    // translatedSecondHex = Converter::binToHex(mod2HexBin);// convert the combined 4 binary digits to hex
+    // first_2_binary_digit = (char *)binary_last_digit.substr(0,2).c_str();   // grab the first 2 binary digits
+    // binary_str_with_n_and_i_flag_off = strcat((char *)first_2_binary_digit.c_str(), "00"); // combine the first 2 binary digit with "00"
+    // last_digit_opcode_in_str = Converter::stringBinToHex(binary_str_with_n_and_i_flag_off);// convert the combined 4 binary digits to hex
 
-    translated_opcode = strcat((char *)firstHex.c_str(),(char *)translatedSecondHex.c_str()); // combime both opcode digits after conversion
+    // both_opcode_digit = strcat((char *)first_digit_str.c_str(),(char *)last_digit_opcode_in_str.c_str()); // combime both opcode digits after conversion
 
-    return translated_opcode;
+    // return both_opcode_digit;
+    return opcodes;
 };

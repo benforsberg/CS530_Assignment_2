@@ -1,15 +1,14 @@
 CC = g++
-CFLAGS = -g
-LDFLAGS = -lm
+CFLAGS = -c
 
-dxe : main.o opcode.o
-	${CC} ${CFLAGS} OpGen.o Converter.o SicDisassembler.o main.o ${LDFLAGS} -o xed
+dxe : main.o Opcode.o
+	${CC} Opcode.o main.o -o dxe
 
-opcode.o : OpGen.cpp
+Opcode.o : Opcode.cpp Opcode.h
 	${CC} ${CFLAGS} -c opcode.cpp
 	
 main.o : main.cpp
 	${CC} ${CFLAGS} -c main.cpp
 
-clean: 
-rm -f dxe *.o
+clean:
+	rm -f dxe *.o
