@@ -12,8 +12,9 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
 	
-	getOpcode("34");
-    cout << "Hello World!";
+    //these two functi
+	cout << Opcode::getInstruction(Opcode::findOpcode("34"));
+    //cout << "Hello World!";
 	
 
     if (argc != 2)

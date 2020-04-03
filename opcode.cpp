@@ -220,7 +220,7 @@ string getOpcode(string opcodes) {
     // return opcodes;
 };
 
-// Return index of the opcode if it is in the optab. -1 if its not
+// Return index of the opcode if it is in the opcode_table. -1 if its not
 int Opcode::findOpcode(string value){
     for (int i = 0; i <= 57; i++) {
         if (opcode_table[i].hex.compare(value) == 0) {
@@ -230,7 +230,7 @@ int Opcode::findOpcode(string value){
     return -1;
 }
 
-// Returns the Instruction name of the Opcode with given location of Opcode inputted
+// Returns the Instruction name from the opcode_table given the index from the opcode_table 
 string Opcode::getInstruction(int optabIndex){
     string instructionName;
     instructionName = opcode_table[optabIndex].name;
