@@ -7,8 +7,64 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <array>
+#include <map>
+#include <algorithm>
 
 using namespace std;
+using std::string;
+
+std::map<const char, const int> fromHex = //A map used for going from hex to int values
+        {{'1', 1},
+         {'2', 2},
+         {'3', 3},
+         {'4', 4},
+         {'5', 5},
+         {'6', 6},
+         {'7', 7},
+         {'8', 8},
+         {'9', 9},
+         {'A', 10},
+         {'B', 11},
+         {'C', 12},
+         {'D', 13},
+         {'E', 14},
+         {'F', 15}};
+
+std::array<int, 4> extractFlags(string instr) {
+    std::array<int, 4> xbpe {{0, 0, 0, 0}};
+    int nibble = fromHex[instr[2]]; //Taking 3rd hex digit (aka the 3rd nibble)
+    for (int i = 0; i < 4; i++) //Checking each bit in the nibble for 1's or 0's
+        xbpe[i] = (nibble & (8 >> i)) ? 1 : 0; //AND'ing the bits (Starting from 8) and shifting right
+    //(aka dividing by 2) to see which places have 1's or 0's
+    return xbpe;
+}
+
+std::array<string, 10> parseInstructions(string textRec) {
+    int pos = 9;  //Position in the text string
+    int n;   //Length of instruction in nibbles/hex digits
+    string instruction; //String to hold individual instruction
+    std::array<int, 4> flags; //Array that holds the extracted flags
+    std::array<string, 10> parsedInstr; //Array to return, holding the separate instructions
+
+    instruction = textRec.substr(pos, 6); //The first instruction
+    flags = extractFlags(instruction); //Taking flags of the instruction to know its length
+
+    for (int i = 0; i < parsedInstr.size() - 1; i++) {
+        if (flags[3] == 1) { //Format == 4
+            n = 8;
+            instruction = textRec.substr(pos, n); //overlapping the instruction w/ correct length
+        } else {             //Format == 3
+            n = 6;
+            instruction = textRec.substr(pos, n);
+        }
+        parsedInstr[i] = instruction; //Storing the instruction
+        pos += n; //Shifting the position counter
+        instruction = textRec.substr(pos, n); //Next instruction
+        flags = extractFlags(instruction); //Next flags
+    }
+    return parsedInstr;
+}
 
 int main(int argc, char *argv[]) {
 	
