@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/marina/Desktop/school/cs530-SystemsPorgamming/ass#2/dxe/Opcode.h
+stdio.h
+-
+string
+-
+
+/Users/marina/Desktop/school/cs530-SystemsPorgamming/ass#2/dxe/main.cpp
+Opcode.h
+/Users/marina/Desktop/school/cs530-SystemsPorgamming/ass#2/dxe/Opcode.h
+iostream
+-
+fstream
+-
+string
+-
+array
+-
+map
+-
+algorithm
+-
+

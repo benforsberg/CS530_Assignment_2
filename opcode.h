@@ -13,6 +13,8 @@ public:
     // static string getRegister(string registerHex);
     // static string getFormat(int optabIndex);
     static string getInstruction(int optabIndex);
+
+    static string getFormats(string opcode);
 };
 
 
