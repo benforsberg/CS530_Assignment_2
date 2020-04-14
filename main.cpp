@@ -12,7 +12,7 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
 	
-    //these two functions
+    //these two functions combined give you back the instruction given the opcode
 	cout << Opcode::getInstruction(Opcode::findOpcode("34"));
     //cout << "Hello World!";
 	
