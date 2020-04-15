@@ -21,7 +21,6 @@ struct flags {
     int e;
 };
 
-
 flags extractFlags(string instr) {
     flags xbpe;
     int nibble = Opcode::hexToInt(instr[2]); //Taking 3rd hex digit (aka the 3rd nibble)
