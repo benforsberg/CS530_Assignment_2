@@ -21,47 +21,47 @@ struct flags {
     int e;
 };
 
-flags extractFlags(string instr) {
-    flags xbpe;
-    int nibble = Opcode::hexToInt(instr[2]); //Taking 3rd hex digit (aka the 3rd nibble)
+// flags extractFlags(string instr) {
+//     flags xbpe;
+//     int nibble = Opcode::hexToInt(instr[2]); //Taking 3rd hex digit (aka the 3rd nibble)
 
-    //Checking each bit in the nibble for 1's or 0's
-    //AND'ing the bits (Starting from 8) and shifting right (aka dividing by 2) to see which places have 1's or 0's
-    xbpe.x = (nibble & 8) ? 1 : 0;
-    xbpe.b = (nibble & 4) ? 1 : 0;
-    xbpe.p = (nibble & 2) ? 1 : 0;
-    xbpe.e = (nibble & 1) ? 1 : 0;
-    return xbpe;
-}
+//     //Checking each bit in the nibble for 1's or 0's
+//     //AND'ing the bits (Starting from 8) and shifting right (aka dividing by 2) to see which places have 1's or 0's
+//     xbpe.x = (nibble & 8) ? 1 : 0;
+//     xbpe.b = (nibble & 4) ? 1 : 0;
+//     xbpe.p = (nibble & 2) ? 1 : 0;
+//     xbpe.e = (nibble & 1) ? 1 : 0;
+//     return xbpe;
+// }
 
-std::array<string, 10> parseInstructions(string textRec) {
-    int pos = 9;  //Position in the text string
-    int n;   //Length of instruction in nibbles/hex digits
-    string instruction; //String to hold individual instruction
-    flags xbpe;   //Struct that holds the extracted flags
-    std::array<string, 10> parsedInstr; //Array to return, holding the separate instructions
+// std::array<string, 10> parseInstructions(string textRec) {
+//     int pos = 9;  //Position in the text string
+//     int n;   //Length of instruction in nibbles/hex digits
+//     string instruction; //String to hold individual instruction
+//     flags xbpe;   //Struct that holds the extracted flags
+//     std::array<string, 10> parsedInstr; //Array to return, holding the separate instructions
 
-    instruction = textRec.substr(pos, 6); //The first instruction
-    xbpe = extractFlags(instruction);   //Taking flags of the instruction to know its format
+//     instruction = textRec.substr(pos, 6); //The first instruction
+//     xbpe = extractFlags(instruction);   //Taking flags of the instruction to know its format
 
-    for (int i = 0; i < parsedInstr.size(); i++) {
-        if (xbpe.e == 1) { //Format == 4
-            n = 8;
-            instruction = textRec.substr(pos, n); //overlapping the instruction w/ correct length
-        } else {             //Format == 3
-            n = 6;
-            instruction = textRec.substr(pos, n);
-        }
-        parsedInstr[i] = instruction; //Storing the instruction
-        pos += n; //Shifting the position counter
-        if (pos <= textRec.length()) //Making sure we are not out of bounds/instructions
-            instruction = textRec.substr(pos, n); //Next instruction
-        else //If we are out of instructions to parse, exit the loop
-            break;
-        xbpe = extractFlags(instruction);   //Next flags
-    }
-    return parsedInstr;
-}
+//     for (int i = 0; i < parsedInstr.size(); i++) {
+//         if (xbpe.e == 1) { //Format == 4
+//             n = 8;
+//             instruction = textRec.substr(pos, n); //overlapping the instruction w/ correct length
+//         } else {             //Format == 3
+//             n = 6;
+//             instruction = textRec.substr(pos, n);
+//         }
+//         parsedInstr[i] = instruction; //Storing the instruction
+//         pos += n; //Shifting the position counter
+//         if (pos <= textRec.length()) //Making sure we are not out of bounds/instructions
+//             instruction = textRec.substr(pos, n); //Next instruction
+//         else //If we are out of instructions to parse, exit the loop
+//             break;
+//         xbpe = extractFlags(instruction);   //Next flags
+//     }
+//     return parsedInstr;
+// }
 
 int main(int argc, char *argv[]) {
 	

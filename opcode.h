@@ -15,6 +15,7 @@ public:
     static string getInstruction(int optabIndex);
 
     static string getFormats(string opcode);
+    static int hexToInt(string value);
 };
 
 
