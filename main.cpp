@@ -42,7 +42,7 @@ std::array<string, 10> parseInstructions(string textRec) {
     std::array<string, 10> parsedInstr; //Array to return, holding the separate instructions
 
     instruction = textRec.substr(pos, 6); //The first instruction
-    xbpe = extractFlags (instruction);   //Taking flags of the instruction to know its format
+    xbpe = extractFlags(instruction);   //Taking flags of the instruction to know its format
 
     for (int i = 0; i < parsedInstr.size(); i++) {
         if (xbpe.e == 1) { //Format == 4
