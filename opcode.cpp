@@ -236,3 +236,10 @@ string Opcode::getInstruction(int opcode_table_index){
     instructionName = opcode_table[opcode_table_index].name;
     return instructionName;
 }
+
+//Returns formats in string format, the input is opcode as a string
+string Opcode::getFormats(string opcode){
+    int opcode_table_index = findOpcode(opcode);
+    string instructionName = opcode_table[opcode_table_index].formats;
+    return instructionName;
+}
