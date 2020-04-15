@@ -35,7 +35,7 @@ std::map<const char, const int> fromHex = //A map used for going from hex to int
 
 std::array<int, 4> extractFlags(string instr) {
     std::array<int, 4> xbpe {{0, 0, 0, 0}};
-    int nibble = hexToInt(instr[2]); //Taking 3rd hex digit (aka the 3rd nibble)
+    int nibble = Opcode::hexToInt(instr[2]); //Taking 3rd hex digit (aka the 3rd nibble)
     for (int i = 0; i < 4; i++) //Checking each bit in the nibble for 1's or 0's
         xbpe[i] = (nibble & (8 >> i)) ? 1 : 0; //AND'ing the bits (Starting from 8) and shifting right
     //(aka dividing by 2) to see which places have 1's or 0's
