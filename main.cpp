@@ -14,6 +14,7 @@
 using namespace std;
 using std::string;
 
+/*
 std::map<const char, const int> fromHex = //A map used for going from hex to int values
         {{'1', 1},
          {'2', 2},
@@ -30,10 +31,11 @@ std::map<const char, const int> fromHex = //A map used for going from hex to int
          {'D', 13},
          {'E', 14},
          {'F', 15}};
+*/
 
 std::array<int, 4> extractFlags(string instr) {
     std::array<int, 4> xbpe {{0, 0, 0, 0}};
-    int nibble = fromHex[instr[2]]; //Taking 3rd hex digit (aka the 3rd nibble)
+    int nibble = hexToInt(instr[2]); //Taking 3rd hex digit (aka the 3rd nibble)
     for (int i = 0; i < 4; i++) //Checking each bit in the nibble for 1's or 0's
         xbpe[i] = (nibble & (8 >> i)) ? 1 : 0; //AND'ing the bits (Starting from 8) and shifting right
     //(aka dividing by 2) to see which places have 1's or 0's
