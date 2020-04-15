@@ -67,13 +67,6 @@ using std::string;
  }
 
 int main(int argc, char *argv[]) {
-
-     //this checks what version of C you are using, should be 17
-    if (__cplusplus == 201703L) std::cout << "C++17\n";
-    else if (__cplusplus == 201402L) std::cout << "C++14\n";
-    else if (__cplusplus == 201103L) std::cout << "C++11\n";
-    else if (__cplusplus == 199711L) std::cout << "C++98\n";
-    else std::cout << "pre-standard C++\n";
 	
     //these two functions combined give you back the instruction given the opcode
 	cout << Opcode::getInstruction(Opcode::findOpcode("34"));
@@ -115,9 +108,6 @@ int main(int argc, char *argv[]) {
     objInput.open(objFileName.c_str());
     symInput.open(symFileName.c_str());
 
-    //opens sic and lis files to write to
-    sicOutput.open(sicFileName);
-    lisOutput.open(lisFileName);
 
     //checks if files exist
     if (!objInput) {
@@ -173,8 +163,114 @@ int main(int argc, char *argv[]) {
 
         if (record.at(0) == 'T') {
             cout << "Found a text record" << endl;
-            //determineflags()
-            //the record will be broken down into individual instructions, with size depending on ext flag status
+            //Will call Dante's function here
+            //parseInstructions(record);
+			
+			
+			 //For testing purposes these strings have data in them, they should be blank in final version
+            //The following section fills in and formats the sic and lis files.
+            //It will make individual strings for each part then make into one final string.
+
+            //SIC File
+            //label col 1-6
+            string label = "LABEL";
+            //col 7-8
+            string spaceChars1 = "  ";
+            //col 9
+            string specialChar1 = "+";
+            //op code col 10-15
+            string opCodeString = "ADD";
+            //space col 16 don't change
+            string space = " ";
+            //# @ = or space char col 17
+            string addressSymbol = "@";
+            //operand col 18-35 size 18
+            string operand = "LISTA";
+            //col 36-68 comments size 33
+            string comments = "This is a comment";
+
+            //This section pads each part with spaces
+            while (label.length() < 6){
+                label.append(" ");
+            }
+            while (spaceChars1.length() < 2){
+                spaceChars1.append(" ");
+            }
+            while (specialChar1.length() < 1){
+                specialChar1.append(" ");
+            }
+            while (opCodeString.length() < 6){
+                opCodeString.append(" ");
+            }
+            while (addressSymbol.length() < 1){
+                addressSymbol.append(" ");
+            }
+            while (operand.length() < 18){
+                operand.append(" ");
+            }
+            while (comments.length() < 33) {
+                comments.append(" ");
+            }
+
+
+
+            //writing output for LIS file
+
+            //label col 1-4
+            string location = "0000";
+            //col 5-8
+            string blank = "    ";
+            //col 9-14
+            string symbolNameLis = "LOOP";
+            //col 15-16 blank
+            string doublespace = "  ";
+            //opcode col 17-23
+            string opcodeLis = "CLEAR";
+            //col 24-25 blank
+            //use doublespace again
+            //26-49 operand/value size 24 1st for @# or =
+            string operandLis = "LISTA + LISTB - LISTC";
+            //col 50-51 doublespace again
+            //col 52-59+ assembled instruction get from record
+            string instructionLis = "050000";
+
+            //This section pads each part with spaces
+            while (location.length() < 4){
+                location.append(" ");
+            }
+            while (blank.length() < 4){
+                blank.append(" ");
+            }
+            while (symbolNameLis.length() < 6){
+                symbolNameLis.append(" ");
+            }
+            while (doublespace.length() < 2){
+                doublespace.append(" ");
+            }
+            while (opcodeLis.length() < 7){
+                opcodeLis.append(" ");
+            }
+            while (operandLis.length() < 24){
+                operandLis.append(" ");
+            }
+            while (instructionLis.length() < 8){
+                instructionLis.append(" ");
+            }
+
+            //full SIC output line to be written to file
+            string sicOutString = label + spaceChars1 + specialChar1 + opCodeString + space + addressSymbol + operand + comments;
+            //full LIS output line to be written to file
+            string lisOutString = location + blank + symbolNameLis + doublespace + opcodeLis + doublespace + operandLis + doublespace + instructionLis;
+
+            //writes to file
+            sicOutput << "Testing SIC file output" << sicOutString << endl;
+            lisOutput << "Testing LIS file output" << lisOutString << endl;
+
+            //Debug
+            cout << sicOutString << endl;
+            cout << lisOutString << endl;
+
+			
         }
 
         if (record.at(0) == 'M') {
@@ -190,14 +286,7 @@ int main(int argc, char *argv[]) {
 
     //debug
     cout <<"Starting address of program " << programName <<" is " << startingAddress << endl;
-    //testing access to sym file
-    //string symData;
-    //cout <<"\nSym file contents:" << endl;
-    //while ( !symInput.eof() )
-    //{
-    //    getline(symInput,symData);
-    //    cout << "" << symData << "\n" ;
-    //}
+
 
     //closes all filestreams
     objInput.close();
