@@ -61,13 +61,16 @@ instructionList parseInstructions(string textRec) {
     xbpe = extractFlags(instruction);  //Taking flags of the instruction to know its format
 
     for (int i = 0; i < sizeof(parsedInstr); i++) {
-        if (xbpe.e == 1) { //Format == 4
+        if (Opcode::getFormats(Opcode::getOpcode(instruction.substr(0,2))) == "1") { //Format == 1
+            n = 2;
+        } else if (Opcode::getFormats(Opcode::getOpcode(instruction.substr(0,2))) == "2") { //Format == 2
+            n = 4;
+        } else if (xbpe.e == 1) { //Format == 4
             n = 8;
-            instruction = textRec.substr(pos, n); //overlapping the instruction w/ correct length
-        } else {             //Format == 3
+        } else { //Format == 3
             n = 6;
-            instruction = textRec.substr(pos, n);
         }
+        instruction = textRec.substr(pos, n); //overlapping the instruction w/ correct length
         parsedInstr[i] = instruction; //Storing the instruction
         pos += n; //Shifting the position counter
         if (pos < textRec.length())
