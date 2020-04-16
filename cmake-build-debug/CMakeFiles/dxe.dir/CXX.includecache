@@ -6,15 +6,9 @@
 
 #IncludeRegexTransform: 
 
-/Users/marina/Desktop/school/cs530-SystemsPorgamming/ass#2/dxe/Opcode.h
-stdio.h
--
-string
--
-
-/Users/marina/Desktop/school/cs530-SystemsPorgamming/ass#2/dxe/main.cpp
+C:/Users/benjf/Dev/CS530/CS530_Assignment_2/main.cpp
 Opcode.h
-/Users/marina/Desktop/school/cs530-SystemsPorgamming/ass#2/dxe/Opcode.h
+C:/Users/benjf/Dev/CS530/CS530_Assignment_2/opcode.h
 iostream
 -
 fstream
@@ -27,4 +21,12 @@ map
 -
 algorithm
 -
+
+C:/Users/benjf/Dev/CS530/CS530_Assignment_2/opcode.h
+stdio.h
+-
+string
+-
+math.h
+C:/Users/benjf/Dev/CS530/CS530_Assignment_2/math.h
 

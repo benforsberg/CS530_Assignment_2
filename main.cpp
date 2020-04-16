@@ -45,11 +45,15 @@ flags extractFlags(string instr) {
     xbpe.b = (nibble & 4) ? 1 : 0;
     xbpe.p = (nibble & 2) ? 1 : 0;
     xbpe.e = (nibble & 1) ? 1 : 0;
+
+    //debug seeing what flags should be
+    //cout <<"Flags for " << instr << ": "<< xbpe.x << xbpe.b<< xbpe.p<< xbpe.e << endl;
+
     return xbpe;
 }
 
 void printInsrcList(instructionList l) {
-    std::cout << l.s0 + " " + l.s1 + " " + l.s2 + " " + l.s3 + " " + l.s4 + " " + l.s5 + " " + l.s6 + " " + l.s7 + " " + l.s8 + " " + l.s9;
+    std::cout << l.s0 + " " + l.s1 + " " + l.s2 + " " + l.s3 + " " + l.s4 + " " + l.s5 + " " + l.s6 + " " + l.s7 + " " + l.s8 + " " + l.s9 << endl;
 }
 
 instructionList parseInstructions(string textRec) {
@@ -96,6 +100,117 @@ instructionList parseInstructions(string textRec) {
 
     return inList;
 }
+
+//need to take in all required data to produce labels, like address, instr, flags etc.
+string printToSICFile(){
+    //For testing purposes these strings have data in them, they should be blank in final version
+    //The following section fills in and formats the sic and lis files.
+    //It will make individual strings for each part then make into one final string.
+
+    //SIC File
+    //label col 1-6
+    string label = "LABEL";
+    //col 7-8
+    string spaceChars1 = "  ";
+    //col 9
+    string specialChar1 = "+";
+    //op code col 10-15
+    string opCodeString = "ADD";
+    //space col 16 don't change
+    string space = " ";
+    //# @ = or space char col 17
+    string addressSymbol = "@";
+    //operand col 18-35 size 18
+    string operand = "LISTA";
+    //col 36-68 comments size 33
+    string comments = "This is a comment";
+
+    //This section pads each section with spaces for correct formatting
+    while (label.length() < 6){
+        label.append(" ");
+    }
+    while (spaceChars1.length() < 2){
+        spaceChars1.append(" ");
+    }
+    while (specialChar1.length() < 1){
+        specialChar1.append(" ");
+    }
+    while (opCodeString.length() < 6){
+        opCodeString.append(" ");
+    }
+    while (addressSymbol.length() < 1){
+        addressSymbol.append(" ");
+    }
+    while (operand.length() < 18){
+        operand.append(" ");
+    }
+    while (comments.length() < 33) {
+        comments.append(" ");
+    }
+
+    //full SIC output line to be written to file
+    string sicOutString = label + spaceChars1 + specialChar1 + opCodeString + space + addressSymbol + operand + comments;
+
+    //Debug
+    cout << sicOutString << endl;
+    return sicOutString;
+
+}
+
+string printToLISFile(){
+    //For testing purposes these strings have data in them, they should be blank in final version
+    //The following section fills in and formats the sic and lis files.
+    //It will make individual strings for each part then make into one final string.
+
+    //writing output for LIS file
+
+    //label col 1-4
+    string location = "0000";
+    //col 5-8
+    string blank = "    ";
+    //col 9-14
+    string symbolNameLis = "LOOP";
+    //col 15-16 blank
+    string doublespace = "  ";
+    //opcode col 17-23
+    string opcodeLis = "CLEAR";
+    //col 24-25 blank
+    //use doublespace again
+    //26-49 operand/value size 24 1st for @# or =
+    string operandLis = "LISTA + LISTB - LISTC";
+    //col 50-51 doublespace again
+    //col 52-59+ assembled instruction get from record
+    string instructionLis = "050000";
+
+    //This section pads each part with spaces
+    while (location.length() < 4){
+        location.append(" ");
+    }
+    while (blank.length() < 4){
+        blank.append(" ");
+    }
+    while (symbolNameLis.length() < 6){
+        symbolNameLis.append(" ");
+    }
+    while (doublespace.length() < 2){
+        doublespace.append(" ");
+    }
+    while (opcodeLis.length() < 7){
+        opcodeLis.append(" ");
+    }
+    while (operandLis.length() < 24){
+        operandLis.append(" ");
+    }
+    while (instructionLis.length() < 8){
+        instructionLis.append(" ");
+    }
+
+    //full LIS output line to be written to file
+    string lisOutString = location + blank + symbolNameLis + doublespace + opcodeLis + doublespace + operandLis + doublespace + instructionLis;
+    return lisOutString;
+}
+
+
 
 int main(int argc, char *argv[]) {
 
@@ -200,128 +315,40 @@ int main(int argc, char *argv[]) {
         //need to add logic for each type in its respective if statement
         if (record.at(0) == 'H') {
             cout << "Found a header record" << endl;
+            cout << record << endl;
         }
 
         if (record.at(0) == 'T') {
             cout << "Found a text record" << endl;
-            //Will call Dante's function here
+            cout << "Integrating Dante's function"<< endl;
             //parseInstructions(record);
-			
-			
-			 //For testing purposes these strings have data in them, they should be blank in final version
-            //The following section fills in and formats the sic and lis files.
-            //It will make individual strings for each part then make into one final string.
+            instructionList inList = parseInstructions(record);
 
-            //SIC File
-            //label col 1-6
-            string label = "LABEL";
-            //col 7-8
-            string spaceChars1 = "  ";
-            //col 9
-            string specialChar1 = "+";
-            //op code col 10-15
-            string opCodeString = "ADD";
-            //space col 16 don't change
-            string space = " ";
-            //# @ = or space char col 17
-            string addressSymbol = "@";
-            //operand col 18-35 size 18
-            string operand = "LISTA";
-            //col 36-68 comments size 33
-            string comments = "This is a comment";
-
-            //This section pads each part with spaces
-            while (label.length() < 6){
-                label.append(" ");
-            }
-            while (spaceChars1.length() < 2){
-                spaceChars1.append(" ");
-            }
-            while (specialChar1.length() < 1){
-                specialChar1.append(" ");
-            }
-            while (opCodeString.length() < 6){
-                opCodeString.append(" ");
-            }
-            while (addressSymbol.length() < 1){
-                addressSymbol.append(" ");
-            }
-            while (operand.length() < 18){
-                operand.append(" ");
-            }
-            while (comments.length() < 33) {
-                comments.append(" ");
-            }
+            printInsrcList(inList);
+            //can pass each instruction to output directly.
 
 
+            //add loop to do this as many times are there are instructions in each record
+            string sicOutString =  printToSICFile();
+            string lisOutString = printToLISFile();
 
-            //writing output for LIS file
-
-            //label col 1-4
-            string location = "0000";
-            //col 5-8
-            string blank = "    ";
-            //col 9-14
-            string symbolNameLis = "LOOP";
-            //col 15-16 blank
-            string doublespace = "  ";
-            //opcode col 17-23
-            string opcodeLis = "CLEAR";
-            //col 24-25 blank
-            //use doublespace again
-            //26-49 operand/value size 24 1st for @# or =
-            string operandLis = "LISTA + LISTB - LISTC";
-            //col 50-51 doublespace again
-            //col 52-59+ assembled instruction get from record
-            string instructionLis = "050000";
-
-            //This section pads each part with spaces
-            while (location.length() < 4){
-                location.append(" ");
-            }
-            while (blank.length() < 4){
-                blank.append(" ");
-            }
-            while (symbolNameLis.length() < 6){
-                symbolNameLis.append(" ");
-            }
-            while (doublespace.length() < 2){
-                doublespace.append(" ");
-            }
-            while (opcodeLis.length() < 7){
-                opcodeLis.append(" ");
-            }
-            while (operandLis.length() < 24){
-                operandLis.append(" ");
-            }
-            while (instructionLis.length() < 8){
-                instructionLis.append(" ");
-            }
-
-            //full SIC output line to be written to file
-            string sicOutString = label + spaceChars1 + specialChar1 + opCodeString + space + addressSymbol + operand + comments;
-            //full LIS output line to be written to file
-            string lisOutString = location + blank + symbolNameLis + doublespace + opcodeLis + doublespace + operandLis + doublespace + instructionLis;
-
-            //writes to file
             sicOutput << "Testing SIC file output" << sicOutString << endl;
             lisOutput << "Testing LIS file output" << lisOutString << endl;
+            //end loop
 
-            //Debug
-            cout << sicOutString << endl;
-            cout << lisOutString << endl;
 
-			
         }
 
         if (record.at(0) == 'M') {
             cout << "Found a modification record" << endl;
+            cout << record << endl;
         }
 
         if (record.at(0) == 'E') {
             cout << "Found an end record" << endl;
+            cout << record << endl;
         }
-        cout << record << endl;
+        //cout << record << endl;
 
     }
 

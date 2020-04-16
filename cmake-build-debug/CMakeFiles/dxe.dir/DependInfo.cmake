@@ -4,10 +4,10 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/Users/marina/Desktop/school/cs530-SystemsPorgamming/ass#2/dxe/Opcode.cpp" "/Users/marina/Desktop/school/cs530-SystemsPorgamming/ass#2/dxe/cmake-build-debug/CMakeFiles/dxe.dir/Opcode.cpp.o"
-  "/Users/marina/Desktop/school/cs530-SystemsPorgamming/ass#2/dxe/main.cpp" "/Users/marina/Desktop/school/cs530-SystemsPorgamming/ass#2/dxe/cmake-build-debug/CMakeFiles/dxe.dir/main.cpp.o"
+  "C:/Users/benjf/Dev/CS530/CS530_Assignment_2/main.cpp" "C:/Users/benjf/Dev/CS530/CS530_Assignment_2/cmake-build-debug/CMakeFiles/dxe.dir/main.cpp.obj"
+  "C:/Users/benjf/Dev/CS530/CS530_Assignment_2/opcode.cpp" "C:/Users/benjf/Dev/CS530/CS530_Assignment_2/cmake-build-debug/CMakeFiles/dxe.dir/opcode.cpp.obj"
   )
-set(CMAKE_CXX_COMPILER_ID "AppleClang")
+set(CMAKE_CXX_COMPILER_ID "GNU")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
