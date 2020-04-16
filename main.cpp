@@ -99,26 +99,26 @@ instructionList parseInstructions(string textRec) {
 
 int main(int argc, char *argv[]) {
 
-    //testing getOpcode function
-    cout << "getOpcode for 04: " + Opcode::getOpcode("04") + "\n";
+    // //testing getOpcode function
+    // cout << "getOpcode for 04: " + Opcode::getOpcode("04") + "\n";
 
-    //testing parseInstructions
-    printInsrcList(parseInstructions("T0000001E0500000320033F691017911BA0131BC0002F200A3B2FF40F102F014F0000640111"));
+    // //testing parseInstructions
+    // printInsrcList(parseInstructions("T0000001E0500000320033F691017911BA0131BC0002F200A3B2FF40F102F014F0000640111"));
 	
-    //these two functions combined give you back the instruction given the opcode
-	cout << Opcode::getInstruction(Opcode::findOpcode("34"));
+    // //these two functions combined give you back the instruction given the opcode
+	// cout << Opcode::getInstruction(Opcode::findOpcode("34"));
 
-	//this function Opcode::getFormats(sting: opcode) gives back formats: 1, 2, 3/4
-    cout << " " + Opcode::getFormats("98");
+	// //this function Opcode::getFormats(sting: opcode) gives back formats: 1, 2, 3/4
+    // cout << " " + Opcode::getFormats("98");
 
-    //testing stringToInt function that takes hex number as a string and returns int
-    cout << "\n80 in hex is ";
-    cout << Opcode::hexToInt("80");
-	cout << " in decimal\n";
+    // //testing stringToInt function that takes hex number as a string and returns int
+    // cout << "\n80 in hex is ";
+    // cout << Opcode::hexToInt("80");
+	// cout << " in decimal\n";
 
     if (argc != 2)
     {
-        cout << " The format of the command should be: dxe <objFileName>.obj" << endl;
+        cout << "The format of the command should be: dxe <objFileName>.obj" << endl;
         exit (1);
     }
     string objFileName = argv[1];

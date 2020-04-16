@@ -14,7 +14,7 @@ public:
     // static string getRegister(string registerHex);
     static string getInstruction(int optabIndex);
     static string getFormats(string opcode);
-    static int hexToInt(string value);//takes a string of 2 (hex)charecters and returns int
+    static int hexToInt(string value); //takes a string of 2 (hex)charecters and returns int
 };
 
 
