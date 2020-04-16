@@ -206,7 +206,7 @@ string getOpcode(string opcodes) {
     firstHex = opcodes.substr(0,1);   // grab the first digit of the opcode
     secondHex = opcodes.substr(1,1);    // grab the secondd digit of the opcode
 
-    secondInt = hexToInt(secondHex);             // convert the last string digit to integer
+    secondInt = Opcode::hexToInt(secondHex);             // convert the last string digit to integer
     secondBin = hexToStringBin(secondInt);       // convert the last integer digit to 4 a binary number
 
     first2Bin = (char *)secondBin.substr(0,2).c_str();   // grab the first 2 binary digits
