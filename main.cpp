@@ -70,7 +70,7 @@ instructionList parseInstructions(string textRec) {
         }
         parsedInstr[i] = instruction; //Storing the instruction
         pos += n; //Shifting the position counter
-        if (pos <= textRec.length())
+        if (pos < textRec.length())
             instruction = textRec.substr(pos, n); //Next instruction
         else
             break;
