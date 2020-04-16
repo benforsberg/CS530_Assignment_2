@@ -102,14 +102,14 @@ const struct opcodes opcode_table[] = {
   {"DC", "WD", "3/4"}
 };
 
-int Opcode::hexToInt(string value){
+int Opcode::hexToInt(string hexValue){
     int num = 0;
     int pow16 = 1;
 
-    string alpha = "0123456789ABCDEF";
-    for(int i = value.length() - 1; i >= 0; --i)
+    string hexchars = "0123456789ABCDEF";
+    for(int i = hexValue.length() - 1; i >= 0; --i)
     {
-        num += alpha.find(toupper(value[i])) * pow16;
+        num += hexchars.find(toupper(hexValue[i])) * pow16;
         pow16 *= 16;
     }
     return num;
@@ -191,8 +191,9 @@ string binToHex(string value){
     exit(EXIT_FAILURE);
 };
 
+
 // Take the first 2 hex digits of the instruction as string
-// Return the true opcode as string.
+// Return the true opcode from opcode table as string.
 string Opcode::getOpcode(string opcodes) {
     int    secondInt;
     string first2Bin;

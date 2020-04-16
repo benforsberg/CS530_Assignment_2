@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <string>
+#include "math.h"
 
 using namespace std;
 
@@ -11,11 +12,9 @@ public:
     static int findOpcode(string value); //finds index of a opcode in opcode table
     static string getOpcode(string opcodes);
     // static string getRegister(string registerHex);
-    // static string getFormat(int optabIndex);
     static string getInstruction(int optabIndex);
-
     static string getFormats(string opcode);
-    static int hexToInt(string value);
+    static int hexToInt(string value);//takes a string of 2 (hex)charecters and returns int
 };
 
 

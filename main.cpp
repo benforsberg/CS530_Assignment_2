@@ -111,7 +111,11 @@ int main(int argc, char *argv[]) {
 
 	//this function Opcode::getFormats(sting: opcode) gives back formats: 1, 2, 3/4
     cout << " " + Opcode::getFormats("98");
-	
+
+    //testing stringToInt function that takes hex number as a string and returns int
+    cout << "\n80 in hex is ";
+    cout << Opcode::hexToInt("80");
+	cout << " in decimal\n";
 
     if (argc != 2)
     {
