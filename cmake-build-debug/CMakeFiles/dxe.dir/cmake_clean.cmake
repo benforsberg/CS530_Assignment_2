@@ -1,8 +1,10 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/dxe.dir/Opcode.cpp.o"
-  "CMakeFiles/dxe.dir/main.cpp.o"
-  "dxe"
+  "CMakeFiles/dxe.dir/main.cpp.obj"
+  "CMakeFiles/dxe.dir/opcode.cpp.obj"
+  "dxe.exe"
+  "dxe.exe.manifest"
   "dxe.pdb"
+  "libdxe.dll.a"
 )
 
 # Per-language clean rules from dependency scanning.

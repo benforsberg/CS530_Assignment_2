@@ -7,5 +7,5 @@ include_directories(.)
 
 add_executable(dxe
         main.cpp
-        Opcode.cpp
-        Opcode.h)
+        opcode.cpp
+        opcode.h)
