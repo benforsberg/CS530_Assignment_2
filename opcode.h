@@ -5,11 +5,11 @@
 #include <string>
 
 using namespace std;
-string getOpcode(std::string opcodes);
+
 class Opcode {
 public:
     static int findOpcode(string value); //finds index of a opcode in opcode table
-    string getOpcode(string opcodes);
+    static string getOpcode(string opcodes);
     // static string getRegister(string registerHex);
     // static string getFormat(int optabIndex);
     static string getInstruction(int optabIndex);

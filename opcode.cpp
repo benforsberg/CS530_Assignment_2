@@ -69,7 +69,7 @@ const struct opcodes opcode_table[] = {
   {"74", "LDT", "3/4"},
   {"04", "LDX", "3/4"},
   {"D0", "LPS", "3/4"},
-  { "20", "MUL", "3/4" }, 
+  {"20", "MUL", "3/4" }, 
   {"60", "MULF", "3/4"},
   {"98", "MULR", "2"},
   {"C8", "NORM", "1"},
@@ -193,7 +193,7 @@ string binToHex(string value){
 
 // Take the first 2 hex digits of the instruction as string
 // Return the true opcode as string.
-string getOpcode(string opcodes) {
+string Opcode::getOpcode(string opcodes) {
     int    secondInt;
     string first2Bin;
     string firstHex;
