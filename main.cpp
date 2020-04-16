@@ -49,6 +49,10 @@ flags extractFlags(string instr) {
     return xbpe;
 }
 
+void printInsrcList(instructionList l) {
+    std::cout << l.s0 + " " + l.s1 + " " + l.s2 + " " + l.s3 + " " + l.s4 + " " + l.s5 + " " + l.s6 + " " + l.s7 + " " + l.s8 + " " + l.s9;
+}
+
 instructionList parseInstructions(string textRec) {
     int pos = 9;  //Position in the text string
     int n;   //Length of instruction in nibbles/hex digits
@@ -95,6 +99,12 @@ instructionList parseInstructions(string textRec) {
 }
 
 int main(int argc, char *argv[]) {
+
+    //testing getOpcode function
+    cout << "getOpcode for 04: " + Opcode::getOpcode("04") + "\n";
+
+    //testing parseInstructions
+    printInsrcList(parseInstructions("T0000001E0500000320033F691017911BA0131BC0002F200A3B2FF40F102F014F0000640111"));
 	
     //these two functions combined give you back the instruction given the opcode
 	cout << Opcode::getInstruction(Opcode::findOpcode("34"));
