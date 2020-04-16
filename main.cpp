@@ -14,6 +14,7 @@
 using namespace std;
 using std::string;
 
+
 struct flags {
     int x;
     int b;
@@ -21,47 +22,74 @@ struct flags {
     int e;
 };
 
-// flags extractFlags(string instr) {
-//     flags xbpe;
-//     int nibble = Opcode::hexToInt(instr[2]); //Taking 3rd hex digit (aka the 3rd nibble)
+struct instructionList {
+    string s0;
+    string s1;
+    string s2;
+    string s3;
+    string s4;
+    string s5;
+    string s6;
+    string s7;
+    string s8;
+    string s9;
+};
 
-//     //Checking each bit in the nibble for 1's or 0's
-//     //AND'ing the bits (Starting from 8) and shifting right (aka dividing by 2) to see which places have 1's or 0's
-//     xbpe.x = (nibble & 8) ? 1 : 0;
-//     xbpe.b = (nibble & 4) ? 1 : 0;
-//     xbpe.p = (nibble & 2) ? 1 : 0;
-//     xbpe.e = (nibble & 1) ? 1 : 0;
-//     return xbpe;
-// }
+flags extractFlags(string instr) {
+    flags xbpe;
+    int nibble = Opcode::hexToInt(instr.substr(2,1)); //Taking 3rd hex digit (aka the 3rd nibble)
 
-// std::array<string, 10> parseInstructions(string textRec) {
-//     int pos = 9;  //Position in the text string
-//     int n;   //Length of instruction in nibbles/hex digits
-//     string instruction; //String to hold individual instruction
-//     flags xbpe;   //Struct that holds the extracted flags
-//     std::array<string, 10> parsedInstr; //Array to return, holding the separate instructions
+    //Checking each bit in the nibble for 1's or 0's
+    //AND'ing the bits (Starting from 8) and shifting right
+    //(aka dividing by 2) to see which places have 1's or 0's
+    xbpe.x = (nibble & 8) ? 1 : 0;
+    xbpe.b = (nibble & 4) ? 1 : 0;
+    xbpe.p = (nibble & 2) ? 1 : 0;
+    xbpe.e = (nibble & 1) ? 1 : 0;
+    return xbpe;
+}
 
-//     instruction = textRec.substr(pos, 6); //The first instruction
-//     xbpe = extractFlags(instruction);   //Taking flags of the instruction to know its format
+instructionList parseInstructions(string textRec) {
+    int pos = 9;  //Position in the text string
+    int n;   //Length of instruction in nibbles/hex digits
+    string instruction; //String to hold individual instruction
+    flags xbpe;  //Struct that holds the extracted flags
+    string parsedInstr[10]; //Array holding the separate instructions
+    instructionList inList; //Struct that will hold instructions and be returned
 
-//     for (int i = 0; i < parsedInstr.size(); i++) {
-//         if (xbpe.e == 1) { //Format == 4
-//             n = 8;
-//             instruction = textRec.substr(pos, n); //overlapping the instruction w/ correct length
-//         } else {             //Format == 3
-//             n = 6;
-//             instruction = textRec.substr(pos, n);
-//         }
-//         parsedInstr[i] = instruction; //Storing the instruction
-//         pos += n; //Shifting the position counter
-//         if (pos <= textRec.length()) //Making sure we are not out of bounds/instructions
-//             instruction = textRec.substr(pos, n); //Next instruction
-//         else //If we are out of instructions to parse, exit the loop
-//             break;
-//         xbpe = extractFlags(instruction);   //Next flags
-//     }
-//     return parsedInstr;
-// }
+    instruction = textRec.substr(pos, 6); //The first instruction
+    xbpe = extractFlags(instruction);  //Taking flags of the instruction to know its format
+
+    for (int i = 0; i < sizeof(parsedInstr); i++) {
+        if (xbpe.e == 1) { //Format == 4
+            n = 8;
+            instruction = textRec.substr(pos, n); //overlapping the instruction w/ correct length
+        } else {             //Format == 3
+            n = 6;
+            instruction = textRec.substr(pos, n);
+        }
+        parsedInstr[i] = instruction; //Storing the instruction
+        pos += n; //Shifting the position counter
+        if (pos < textRec.length())
+            instruction = textRec.substr(pos, n); //Next instruction
+        else
+            break;
+        xbpe = extractFlags(instruction);  //Next flags
+    }
+
+    inList.s0 = parsedInstr[0];
+    inList.s1 = parsedInstr[1];
+    inList.s2 = parsedInstr[2];
+    inList.s3 = parsedInstr[3];
+    inList.s4 = parsedInstr[4];
+    inList.s5 = parsedInstr[5];
+    inList.s6 = parsedInstr[6];
+    inList.s7 = parsedInstr[7];
+    inList.s8 = parsedInstr[8];
+    inList.s9 = parsedInstr[9];
+
+    return inList;
+}
 
 int main(int argc, char *argv[]) {
 	
