@@ -102,6 +102,7 @@ const struct opcodes opcode_table[] = {
   {"DC", "WD", "3/4"}
 };
 
+//takes a string of 2 (hex)charecters and returns int
 int Opcode::hexToInt(string hexValue){
     int num = 0;
     int pow16 = 1;
