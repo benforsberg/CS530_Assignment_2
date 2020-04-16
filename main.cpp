@@ -14,7 +14,6 @@
 using namespace std;
 using std::string;
 
-
 struct flags {
     int x;
     int b;
