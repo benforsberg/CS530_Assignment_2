@@ -32,6 +32,17 @@ struct instructionList {
     string s7;
     string s8;
     string s9;
+    //strings that keep track of each instruction's format
+    string form0;
+    string form1;
+    string form2;
+    string form3;
+    string form4;
+    string form5;
+    string form6;
+    string form7;
+    string form8;
+    string form9;
 };
 
 flags extractFlags(string instr) {
@@ -62,6 +73,7 @@ instructionList parseInstructions(string textRec) {
     string instruction; //String to hold individual instruction
     flags xbpe;  //Struct that holds the extracted flags
     string parsedInstr[10]; //Array holding the separate instructions
+    string form[10]; //Array holding the formats
     instructionList inList; //Struct that will hold instructions and be returned
 
     instruction = textRec.substr(pos, 6); //The first instruction
@@ -69,12 +81,16 @@ instructionList parseInstructions(string textRec) {
 
     for (int i = 0; i < sizeof(parsedInstr); i++) {
         if (Opcode::getFormats(Opcode::getOpcode(instruction.substr(0,2))) == "1") { //Format == 1
+            form[i] = "1";
             n = 2;
         } else if (Opcode::getFormats(Opcode::getOpcode(instruction.substr(0,2))) == "2") { //Format == 2
+            form[i] = "2";
             n = 4;
         } else if (xbpe.e == 1) { //Format == 4
+            form[i] = "4";
             n = 8;
         } else { //Format == 3
+            form[i] = "3";
             n = 6;
         }
         instruction = textRec.substr(pos, n); //overlapping the instruction w/ correct length
@@ -97,6 +113,17 @@ instructionList parseInstructions(string textRec) {
     inList.s7 = parsedInstr[7];
     inList.s8 = parsedInstr[8];
     inList.s9 = parsedInstr[9];
+
+    inList.form0 = form[0];
+    inList.form1 = form[1];
+    inList.form2 = form[2];
+    inList.form3 = form[3];
+    inList.form4 = form[4];
+    inList.form5 = form[5];
+    inList.form6 = form[6];
+    inList.form7 = form[7];
+    inList.form8 = form[8];
+    inList.form9 = form[9];
 
     return inList;
 }
