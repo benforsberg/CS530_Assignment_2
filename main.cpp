@@ -128,7 +128,6 @@ instructionList parseInstructions(string textRec) {
     return inList;
 }
 
-
 //Takes in a single instruction
 //Returns its displacement/address field
 string extractDisplacement(string instr) {
