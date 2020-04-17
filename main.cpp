@@ -3,7 +3,7 @@
 //Marina Pestriacheva, cssc1907
 //Dante Colombo-Sadeghi, cssc1911
 
-#include "Opcode.h"
+#include "opcode.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -128,29 +128,127 @@ instructionList parseInstructions(string textRec) {
     return inList;
 }
 
-//need to take in all required data to produce labels, like address, instr, flags etc.
-string printToSICFile(){
-    //For testing purposes these strings have data in them, they should be blank in final version
-    //The following section fills in and formats the sic and lis files.
-    //It will make individual strings for each part then make into one final string.
+//Takes in a single instruction
+//Returns its displacement/address field
+string extractDisplacement(string instr) {
+    string disp;
 
-    //SIC File
+    if (instr.length() == 2) //format 1
+        disp = "No Displacement Field. Format 1.";
+    else if (instr.length() == 4) //format 2
+        disp = "No Displacement Field. Format 2.";
+    else if (instr.length() == 6) //format 3
+        disp = instr.substr(3,3);
+    else if (instr.length() == 8) //format 4 (extended)
+        disp = instr.substr(3,5);
+    else
+        disp = "Not a valid instruction.";
+
+    return disp;
+}
+
+//Takes in a single instruction
+//Returns the addressing mode(s)
+string addressingMode(string instr) {
+    string mode; //String which will be returned
+    flags f = extractFlags(instr); //To see x, b, p, and e
+    string opcode = instr.substr(0,2); //Storing opcode characters into a variable
+
+    if (Opcode::getFormats(Opcode::getOpcode(opcode)) != "3/4") {//Getting formats from opcode table to see if Format == 3/4
+        mode = "No addressing mode associated. Format == 1 or 2";
+    } else { //Must be format 3 or 4 by this point
+        int difference = Opcode::hexToInt(opcode) - Opcode::hexToInt(Opcode::getOpcode(opcode)); //Difference between "given" and "true" opcode
+        if (f.e == 1) { //FORMAT == 4; Always Direct Addressing (Never Base- nor PC-relative)
+            if (difference == 3) //Simple Addressing
+                if (f.x == 1) //Indexing
+                    mode = "Simple & Direct Addressing (Indexing).";
+                else //No Indexing
+                    mode = "Simple & Direct Addressing.";
+            else if (difference == 2) //iNdirect Addressing
+                mode = "iNdirect & Direct Addressing.";
+            else  //difference == 1, Immediate Addressing
+                mode = "Immediate and Direct Addressing.";
+        } else { //FORMAT == 3
+            if (difference == 3) { //Simple Addressing
+                if (f.x == 1) { //Indexing
+                    if (f.b == 1) //Base-relative
+                        mode = "Simple Addressing (Indexing & Base-relative).";
+                    else if (f.p == 1)  //PC-relative
+                        mode = "Simple Addressing (Indexing & PC-relative).";
+                    else  //Neither Base- nor PC-Relative
+                        mode = "Simple & Direct Addressing (Indexing).";
+                } else { //No indexing
+                    if (f.b == 1)  //Base-relative
+                        mode = "Simple Addressing (Base-relative).";
+                    else if (f.p == 1)  //PC-relative
+                        mode = "Simple Addressing (PC-relative).";
+                    else  //Neither Base- nor PC-Relative
+                        mode = "Simple & Direct Addressing.";
+                }
+            } else if (difference == 2) { //iNdirect Addressing, there is no Indexing
+                if (f.b == 1) //Base-relative
+                    mode = "iNdirect Addressing (Base-relative).";
+                else if (f.p == 1) //PC-relative
+                    mode = "iNdirect Addressing (PC-relative).";
+                else //neither Base- nor PC-relative
+                    mode = "iNdirect & Direct Adressing.";
+            } else { //difference == 1, Immediate Addressing, there is no Indexing
+                if (f.b == 1) //Base-relative
+                    mode = "Immediate Addressing (Base-relative).";
+                else if (f.p == 1) //PC-relative
+                    mode = "Immediate Addressing (PC-relative).";
+                else //Neither Base- nor PC-relative
+                    mode = "Immediate & Direct Addressing.";
+            }
+        }
+    }
+    return mode;
+}
+
+
+string printToSICFile(string sicLabel, string opCode, string sicOperand, string comment,string objCode){
     //label col 1-6
-    string label = "LABEL";
+    string label = sicLabel;
     //col 7-8
     string spaceChars1 = "  ";
     //col 9
-    string specialChar1 = "+";
+
+    string isExtended = " ";
+    flags flag = extractFlags(objCode);
+    int extValue = flag.e;
+    int indirectValue = 0;
+    int immediateValue = 0;
+
+    //debug
+    //cout << "\nAddressing type: " <<addressingMode(objCode) << endl;
+
+    //checks if start of string returned by addressingMode() has immediate or indirect in it to apply special character
+    if (addressingMode(objCode).substr(0,9) =="iNdirect"){
+        indirectValue = 1;
+    }
+    if (addressingMode(objCode).substr(0,9) =="Immediate"){
+        immediateValue = 1;
+    }
+
+    if (extValue == 1)
+        isExtended = "+";
+    //default is space, gets set as other if found
+    string operandSymbol = " ";
+    if (indirectValue == 1)
+        operandSymbol = "@";
+    if (immediateValue == 1)
+        operandSymbol = "#";
+
     //op code col 10-15
-    string opCodeString = "ADD";
+    string opCodeString = opCode;
     //space col 16 don't change
     string space = " ";
     //# @ = or space char col 17
-    string addressSymbol = "@";
+    //string operandSymbol = operandSym;
     //operand col 18-35 size 18
-    string operand = "LISTA";
+    string operand = sicOperand;
     //col 36-68 comments size 33
-    string comments = "This is a comment";
+    string comments = comment;
 
     //This section pads each section with spaces for correct formatting
     while (label.length() < 6){
@@ -159,14 +257,11 @@ string printToSICFile(){
     while (spaceChars1.length() < 2){
         spaceChars1.append(" ");
     }
-    while (specialChar1.length() < 1){
-        specialChar1.append(" ");
-    }
     while (opCodeString.length() < 6){
         opCodeString.append(" ");
     }
-    while (addressSymbol.length() < 1){
-        addressSymbol.append(" ");
+    while (operandSymbol.length() < 1){
+        operandSymbol.append(" ");
     }
     while (operand.length() < 18){
         operand.append(" ");
@@ -176,38 +271,63 @@ string printToSICFile(){
     }
 
     //full SIC output line to be written to file
-    string sicOutString = label + spaceChars1 + specialChar1 + opCodeString + space + addressSymbol + operand + comments;
+    string sicOutString = label + spaceChars1 + isExtended + opCodeString + space + operandSymbol + operand + comments;
 
     //Debug
-    cout << sicOutString << endl;
+    //cout << sicOutString << endl;
     return sicOutString;
 
 }
-
-string printToLISFile(){
-    //For testing purposes these strings have data in them, they should be blank in final version
-    //The following section fills in and formats the sic and lis files.
-    //It will make individual strings for each part then make into one final string.
-
+//need to account for special char columns!
+string printToLISFile(string lineAddr, string symName, string opCode, string operand, string objCode){
     //writing output for LIS file
 
     //label col 1-4
-    string location = "0000";
+    string location = lineAddr;
     //col 5-8
     string blank = "    ";
     //col 9-14
-    string symbolNameLis = "LOOP";
+    string symbolNameLis = symName;
     //col 15-16 blank
     string doublespace = "  ";
-    //opcode col 17-23
-    string opcodeLis = "CLEAR";
+
+    //col 17 special + symbol
+    string isExtended = " ";
+    flags flag = extractFlags(objCode);
+    int extValue = flag.e;
+    int indirectValue = 0;
+    int immediateValue = 0;
+    //debug
+
+    //cout << "\nAddressing type: " <<addressingMode(objCode) << endl;
+
+    if (addressingMode(objCode).substr(0,9) =="iNdirect"){
+        indirectValue = 1;
+    }
+    if (addressingMode(objCode).substr(0,9) =="Immediate"){
+        immediateValue = 1;
+    }
+
+    if (extValue == 1)
+        isExtended = "+";
+    string operandSymbol = " ";
+    if (indirectValue == 1)
+        operandSymbol = "@";
+    if (immediateValue == 1)
+        operandSymbol = "#";
+
+    //opcode col 18-23
+    string opcodeLis = opCode;
     //col 24-25 blank
     //use doublespace again
-    //26-49 operand/value size 24 1st for @# or =
-    string operandLis = "LISTA + LISTB - LISTC";
+    //26 special addressingSymbol
+    string addressSymbol = "";
+    //27-49 operand/value size 23
+    string operandLis = operand;
     //col 50-51 doublespace again
     //col 52-59+ assembled instruction get from record
-    string instructionLis = "050000";
+    string instructionLis =  objCode;
+
 
     //This section pads each part with spaces
     while (location.length() < 4){
@@ -222,18 +342,19 @@ string printToLISFile(){
     while (doublespace.length() < 2){
         doublespace.append(" ");
     }
-    while (opcodeLis.length() < 7){
+    while (opcodeLis.length() < 6){
         opcodeLis.append(" ");
     }
-    while (operandLis.length() < 24){
+    while (operandLis.length() < 23){
         operandLis.append(" ");
     }
     while (instructionLis.length() < 8){
         instructionLis.append(" ");
     }
 
-    //full LIS output line to be written to file
-    string lisOutString = location + blank + symbolNameLis + doublespace + opcodeLis + doublespace + operandLis + doublespace + instructionLis;
+    //full LIS output line to be written to file //+ isExtended
+    string lisOutString = location + blank + symbolNameLis + doublespace + isExtended + opcodeLis + doublespace + operandSymbol +  operandLis + doublespace + instructionLis;
+    //cout << "LIS Outstring" << lisOutString << endl;
     return lisOutString;
 }
 
@@ -258,6 +379,7 @@ int main(int argc, char *argv[]) {
     // cout << Opcode::hexToInt("80");
 	// cout << " in decimal\n";
 
+	//Checks for correct arguments
     if (argc != 2)
     {
         cout << "The format of the command should be: dxe <objFileName>.obj" << endl;
@@ -328,7 +450,7 @@ int main(int argc, char *argv[]) {
         if (count == 0 ){
             programName = record;
             programName = programName.substr (1);
-            cout << "Program Name is: " << programName << endl;
+            cout << "\nProgram Name is: " << programName << endl;
         }
 
         count++;
@@ -347,23 +469,65 @@ int main(int argc, char *argv[]) {
 
         if (record.at(0) == 'T') {
             cout << "Found a text record" << endl;
-            cout << "Integrating Dante's function"<< endl;
-            //parseInstructions(record);
-            instructionList inList = parseInstructions(record);
 
-            printInsrcList(inList);
-            //can pass each instruction to output directly.
-
-
-            //add loop to do this as many times are there are instructions in each record
-            string sicOutString =  printToSICFile();
-            string lisOutString = printToLISFile();
-
-            sicOutput << "Testing SIC file output" << sicOutString << endl;
-            lisOutput << "Testing LIS file output" << lisOutString << endl;
-            //end loop
+            //Makes array of instructions returned from the struct
+            instructionList instrList = parseInstructions(record);
+            string objList[] = {instrList.s0,instrList.s1,instrList.s2,instrList.s3,instrList.s4,instrList.s5,
+                                instrList.s6,instrList.s7,instrList.s8,instrList.s9}; //instrList.s9
 
 
+            //code to check if an instruction exists
+            //might need to be used for stopping array out of bounds error if different # of instructions than expected
+
+            //cout << "S8 is empty?: " << isEmpty8<<endl;
+             /* bool isEmpty0 = instrList.s0.empty();
+            bool isEmpty1 = instrList.s1.empty();
+            bool isEmpty2 = instrList.s2.empty();
+            bool isEmpty3 = instrList.s3.empty();
+            bool isEmpty4 = instrList.s4.empty();
+            bool isEmpty5 = instrList.s5.empty();
+            bool isEmpty6 = instrList.s6.empty();
+            bool isEmpty7 = instrList.s7.empty();
+            bool isEmpty8 = instrList.s8.empty();
+            bool isEmpty9 = instrList.s9.empty();*/
+
+
+           //TODO
+           //Test data hardcoded for now, need to write code to populate these
+           //need address calculation, labels pulled from symtable, literal detection,
+           // and operands/displacement field function integrated
+
+           string addresses[] = {"0000", "0003","0006","0009","000C","000E","0012","0015","0018","001B"};
+           string labels[] = {"START", "LOOP","HI","","LOOP2","","WAIT","STORE","","END"};
+           string opCodes[] = {"ADD", "CLEAR","SUB","TIX","DIV","MULT","JSUB","RSUB","STL","LDA"};
+           string operands[] = {"LISTA", "LISTB","LISTC","MAXLEN","MIN","TOTAL","LISTA-LISTB","LISTB-LISTC+LISTA","FIRST","STORE"};
+
+
+            //need to do this as many times are there are instructions in each record
+            //possibly make arrays of all that need to be passed in for all instructions in the record, then pass array vals in loop
+            cout << endl;
+            for (int i = 0; i < 9; i++){
+
+                //This statement generates a string with SIC format
+                string sicOutString = printToSICFile(labels[i], opCodes[i], operands[i],"This is a comment.",objList[i]);
+
+                //This statement generates a string with LIS format
+                string lisOutString = printToLISFile(addresses[i],labels[i], opCodes[i], operands[i], objList[i]);
+
+                //Statements below show SIC and LIS output in console (Having both on at once not recommended for readability's sake)
+                cout  << lisOutString << endl;
+                //cout << sicOutString << endl;
+
+                //Writes both strings to their respective files
+                lisOutput << lisOutString << endl;
+                sicOutput << sicOutString << endl;
+
+            }
+
+            //debug testing known immediate and indirect instructions to test function
+            cout << "\nTesting addressing modes" << endl;
+            cout << addressingMode("022030") << endl;
+            cout << addressingMode("010030") <<  "\n"<< endl;
         }
 
         if (record.at(0) == 'M') {
@@ -375,13 +539,11 @@ int main(int argc, char *argv[]) {
             cout << "Found an end record" << endl;
             cout << record << endl;
         }
-        //cout << record << endl;
 
     }
 
     //debug
     cout <<"Starting address of program " << programName <<" is " << startingAddress << endl;
-
 
     //closes all filestreams
     objInput.close();
