@@ -128,6 +128,84 @@ instructionList parseInstructions(string textRec) {
     return inList;
 }
 
+
+//Takes in a single instruction
+//Returns its displacement/address field
+string extractDisplacement(string instr) {
+    string disp;
+
+    if (instr.length() == 2) //format 1
+        disp = "No Displacement Field. Format 1.";
+    else if (instr.length() == 4) //format 2
+        disp = "No Displacement Field. Format 2.";
+    else if (instr.length() == 6) //format 3
+        disp = instr.substr(3,3);
+    else if (instr.length() == 8) //format 4 (extended)
+        disp = instr.substr(3,5);
+    else
+        disp = "Not a valid instruction.";
+
+    return disp;
+}
+
+//Takes in a single instruction
+//Returns the addressing mode(s)
+string addressingMode(string instr) {
+    string mode; //String which will be returned
+    flags f = extractFlags(instr); //To see x, b, p, and e
+    string opcode = instr.substr(0,2); //Storing opcode characters into a variable
+
+    if (Opcode::getFormats(Opcode::getOpcode(opcode)) != "3/4") {//Getting formats from opcode table to see if Format == 3/4
+        mode = "No addressing mode associated. Format == 1 or 2";
+    } else { //Must be format 3 or 4 by this point
+        int difference = Opcode::hexToInt(opcode) - Opcode::hexToInt(Opcode::getOpcode(opcode)); //Difference between "given" and "true" opcode
+        if (f.e == 1) { //FORMAT == 4; Always Direct Addressing (Never Base- nor PC-relative)
+            if (difference == 3) //Simple Addressing
+                if (f.x == 1) //Indexing
+                    mode = "Simple & Direct Addressing (Indexing).";
+                else //No Indexing
+                    mode = "Simple & Direct Addressing.";
+            else if (difference == 2) //iNdirect Addressing
+                mode = "iNdirect & Direct Addressing.";
+            else  //difference == 1, Immediate Addressing
+                mode = "Immediate and Direct Addressing.";
+        } else { //FORMAT == 3
+            if (difference == 3) { //Simple Addressing
+                if (f.x == 1) { //Indexing
+                    if (f.b == 1) //Base-relative
+                        mode = "Simple Addressing (Indexing & Base-relative).";
+                    else if (f.p == 1)  //PC-relative
+                        mode = "Simple Addressing (Indexing & PC-relative).";
+                    else  //Neither Base- nor PC-Relative
+                        mode = "Simple & Direct Addressing (Indexing).";
+                } else { //No indexing
+                    if (f.b == 1)  //Base-relative
+                        mode = "Simple Addressing (Base-relative).";
+                    else if (f.p == 1)  //PC-relative
+                        mode = "Simple Addressing (PC-relative).";
+                    else  //Neither Base- nor PC-Relative
+                        mode = "Simple & Direct Addressing.";
+                }
+            } else if (difference == 2) { //iNdirect Addressing, there is no Indexing
+                if (f.b == 1) //Base-relative
+                    mode = "iNdirect Addressing (Base-relative).";
+                else if (f.p == 1) //PC-relative
+                    mode = "iNdirect Addressing (PC-relative).";
+                else //neither Base- nor PC-relative
+                    mode = "iNdirect & Direct Adressing.";
+            } else { //difference == 1, Immediate Addressing, there is no Indexing
+                if (f.b == 1) //Base-relative
+                    mode = "Immediate Addressing (Base-relative).";
+                else if (f.p == 1) //PC-relative
+                    mode = "Immediate Addressing (PC-relative).";
+                else //Neither Base- nor PC-relative
+                    mode = "Immediate & Direct Addressing.";
+            }
+        }
+    }
+    return mode;
+}
+
 //need to take in all required data to produce labels, like address, instr, flags etc.
 string printToSICFile(){
     //For testing purposes these strings have data in them, they should be blank in final version
