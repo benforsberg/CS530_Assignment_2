@@ -1,1 +1,9 @@
-Testing SIC file outputLABEL   +ADD    @LISTA             This is a comment                
+START    ADD    #LISTA             This is a comment.               
+LOOP     CLEAR   LISTB             This is a comment.               
+HI       SUB     LISTC             This is a comment.               
+        +TIX     MAXLEN            This is a comment.               
+LOOP2   +DIV     MIN               This is a comment.               
+         MULT    TOTAL             This is a comment.               
+WAIT     JSUB    LISTA-LISTB       This is a comment.               
+STORE   +RSUB    LISTB-LISTC+LISTA This is a comment.               
+         STL     FIRST             This is a comment.               

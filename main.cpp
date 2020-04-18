@@ -10,6 +10,10 @@
 #include <array>
 #include <map>
 #include <algorithm>
+#include <vector>
+#include <iomanip>
+#include <sstream> 
+
 
 using namespace std;
 using std::string;
@@ -126,6 +130,229 @@ instructionList parseInstructions(string textRec) {
     inList.form9 = form[9];
 
     return inList;
+}
+
+string int_to_hex( int b )
+{
+  std::stringstream stream;
+  stream << setfill ('0') << std::setw(sizeof(int)) 
+         << hex << b;
+  return stream.str();
+}
+
+//function that returns the array of Loc adresses (lis files on the left)
+//startAddr has 6 charecters!
+vector<string> addressesLoc(string startAddr, instructionList instructions) {
+    vector<string> addrLoc; //this will hold Loc addresses
+    int intAddr = Opcode::hexToInt(startAddr);
+    addrLoc.push_back(startAddr.substr(2, 6)); //loads first address 
+    cout << "\nthis is int to hex " << int_to_hex(98) <<"\n";;
+    if (instructions.s0!= "none") {
+        if (instructions.form0 == "1"){
+            intAddr += 1;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+        else if (instructions.form0 == "2"){
+            intAddr += 2;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+        else if (instructions.form0 == "3"){
+            intAddr += 3;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+        else if (instructions.form0 == "4"){
+            intAddr += 4;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+    }
+    if (instructions.s1!= "none") {
+        if (instructions.form0 == "1"){
+            intAddr += 1;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+        else if (instructions.form0 == "2"){
+            intAddr += 2;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+        else if (instructions.form0 == "3"){
+            intAddr += 3;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+        else if (instructions.form0 == "4"){
+            intAddr += 4;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+    }
+    if (instructions.s2!= "none") {
+        if (instructions.form0 == "1"){
+            intAddr += 1;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+        else if (instructions.form0 == "2"){
+            intAddr += 2;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+        else if (instructions.form0 == "3"){
+            intAddr += 3;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+        else if (instructions.form0 == "4"){
+            intAddr += 4;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+    }
+    if (instructions.s3!= "none") {
+        if (instructions.form0 == "1"){
+            intAddr += 1;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+        else if (instructions.form0 == "2"){
+            intAddr += 2;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+        else if (instructions.form0 == "3"){
+            intAddr += 3;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+        else if (instructions.form0 == "4"){
+            intAddr += 4;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+    }
+    if (instructions.s4!= "none") {
+        if (instructions.form0 == "1"){
+            intAddr += 1;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+        else if (instructions.form0 == "2"){
+            intAddr += 2;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+        else if (instructions.form0 == "3"){
+            intAddr += 3;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+        else if (instructions.form0 == "4"){
+            intAddr += 4;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+    }
+    if (instructions.s5!= "none") {
+        if (instructions.form0 == "1"){
+            intAddr += 1;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+        else if (instructions.form0 == "2"){
+            intAddr += 2;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+        else if (instructions.form0 == "3"){
+            intAddr += 3;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+        else if (instructions.form0 == "4"){
+            intAddr += 4;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+    }
+    if (instructions.s6!= "none") {
+        if (instructions.form0 == "1"){
+            intAddr += 1;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+        else if (instructions.form0 == "2"){
+            intAddr += 2;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+        else if (instructions.form0 == "3"){
+            intAddr += 3;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+        else if (instructions.form0 == "4"){
+            intAddr += 4;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+    }
+    if (instructions.s7!= "none") {
+        if (instructions.form0 == "1"){
+            intAddr += 1;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+        else if (instructions.form0 == "2"){
+            intAddr += 2;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+        else if (instructions.form0 == "3"){
+            intAddr += 3;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+        else if (instructions.form0 == "4"){
+            intAddr += 4;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+    }
+    if (instructions.s9!= "none") {
+        if (instructions.form0 == "1"){
+            intAddr += 1;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+        else if (instructions.form0 == "2"){
+            intAddr += 2;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+        else if (instructions.form0 == "3"){
+            intAddr += 3;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+        else if (instructions.form0 == "4"){
+            intAddr += 4;
+            string newAddr = int_to_hex(intAddr);
+            addrLoc.push_back(newAddr);
+        }
+    }
+    
+
+    std::cout << "The contents of addrLoc:";
+    for (std::vector<string>::iterator it = addrLoc.begin(); it != addrLoc.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
+
+    return addrLoc;
 }
 
 //Takes in a single instruction
@@ -379,6 +606,7 @@ int main(int argc, char *argv[]) {
     // cout << Opcode::hexToInt("80");
 	// cout << " in decimal\n";
 
+
 	//Checks for correct arguments
     if (argc != 2)
     {
@@ -406,7 +634,9 @@ int main(int argc, char *argv[]) {
 
     string record;
     string programName;
+    string strtAdrsAndLngth;
     string startingAddress;
+    string programLength;
     int count = 0;
 
     //opens obj and sym files to read
@@ -456,7 +686,9 @@ int main(int argc, char *argv[]) {
         count++;
         //avoids counting starting address in header as a separate record
         if (count == 2) {
-            startingAddress = record;
+            strtAdrsAndLngth = record;
+            startingAddress = strtAdrsAndLngth.substr(0, 6);
+            programLength = strtAdrsAndLngth.substr(6,6);
             continue;
         }
 
@@ -542,8 +774,15 @@ int main(int argc, char *argv[]) {
 
     }
 
+
+
+    //testing addressesLoc function 
+    instructionList testing= parseInstructions("T0000001E0500000320033F691017911BA0131BC0002F200A3B2FF40F102F014F0000640111");
+    addressesLoc(startingAddress, testing);
+
     //debug
     cout <<"Starting address of program " << programName <<" is " << startingAddress << endl;
+    cout <<"Length of program " << programName <<" is " << programLength << endl;
 
     //closes all filestreams
     objInput.close();

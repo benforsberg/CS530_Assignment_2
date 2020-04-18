@@ -1,1 +1,9 @@
-Testing LIS file output0000    LOOP    CLEAR    LISTA + LISTB - LISTC     050000  
+0000    START    ADD     #LISTA                    050000  
+0003    LOOP     CLEAR    LISTB                    032003  
+0006    HI       SUB      LISTC                    3F6910  
+0009            +TIX      MAXLEN                   17911BA0
+000C    LOOP2   +DIV      MIN                      131BC000
+000E             MULT     TOTAL                    2F200A  
+0012    WAIT     JSUB     LISTA-LISTB              3B2FF4  
+0015    STORE   +RSUB     LISTB-LISTC+LISTA        0F102F01
+0018             STL      FIRST                    4F0000  
