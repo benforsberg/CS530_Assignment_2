@@ -37,16 +37,16 @@ struct instructionList {
     string s8 = "none";
     string s9 = "none";
     //strings that keep track of each instruction's format
-    string form0;
-    string form1;
-    string form2;
-    string form3;
-    string form4;
-    string form5;
-    string form6;
-    string form7;
-    string form8;
-    string form9;
+    string form0 = "none";
+    string form1 = "none";
+    string form2 = "none";
+    string form3 = "none";
+    string form4 = "none";
+    string form5 = "none";
+    string form6 = "none";
+    string form7 = "none";
+    string form8 = "none";
+    string form9 = "none";
 };
 
 flags extractFlags(string instr) {
