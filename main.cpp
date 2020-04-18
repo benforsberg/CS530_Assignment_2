@@ -558,17 +558,19 @@ int main(int argc, char *argv[]) {
 
             cout<< "Program length:" << programLength <<endl;
 
+            //makes title lines for SIC and LIS files
             string sicTitleLine;
             string lisTitleLine;
             while (programName.size() < 9){
                 programName  = programName + " ";
             }
+            //for correct formatting
             string lisStart = programName;
             lisStart.pop_back();
 
             if (zeroAddr == "000000") {
                 sicTitleLine = programName + "START  " + " 0";
-                lisTitleLine = lisStart + "START   " + " 0";
+                lisTitleLine = "0000    " + programName + "START   " + " 0";
             }
 
             else {
@@ -593,12 +595,62 @@ int main(int argc, char *argv[]) {
 
             //Makes array of instructions returned from the struct
             instructionList instrList = parseInstructions(record);
-            string objList[] = {instrList.s0,instrList.s1,instrList.s2,instrList.s3,instrList.s4,instrList.s5,
-                                instrList.s6,instrList.s7,instrList.s8,instrList.s9}; //instrList.s9
 
+            int numInstructionsInRecord = 0;
 
-            //code to check if an instruction exists
-            //might need to be used for stopping array out of bounds error if different # of instructions than expected
+            //control size of objList array 2 parts, have counter of how many instructions present in record
+            //part 1 check each s# if == "none"
+            //if != inc counter for arr size
+
+                if (instrList.s0 != "none")
+                    numInstructionsInRecord++;
+                if (instrList.s1 != "none")
+                    numInstructionsInRecord++;
+                if (instrList.s2 != "none")
+                    numInstructionsInRecord++;
+                if (instrList.s3 != "none")
+                    numInstructionsInRecord++;
+                if (instrList.s4 != "none")
+                    numInstructionsInRecord++;
+                if (instrList.s5 != "none")
+                    numInstructionsInRecord++;
+                if (instrList.s6 != "none")
+                    numInstructionsInRecord++;
+                if (instrList.s7 != "none")
+                    numInstructionsInRecord++;
+                if (instrList.s8 != "none")
+                    numInstructionsInRecord++;
+                if (instrList.s9 != "none")
+                    numInstructionsInRecord++;
+
+            //makes array of instructions of correct size;
+            string objList[numInstructionsInRecord];
+
+            //part 2 if s# != "none" add to objCode[i]
+                if (instrList.s0 != "none")
+                    objList[0] = instrList.s0;
+                if (instrList.s1 != "none")
+                    objList[1] = instrList.s1;
+                if (instrList.s2 != "none")
+                    objList[2] = instrList.s2;
+                if (instrList.s3 != "none")
+                    objList[3] = instrList.s3;
+                if (instrList.s4 != "none")
+                    objList[4] = instrList.s4;
+                if (instrList.s5 != "none")
+                    objList[5] = instrList.s5;
+                if (instrList.s6 != "none")
+                    objList[6] = instrList.s6;
+                if (instrList.s7 != "none")
+                    objList[7] = instrList.s7;
+                if (instrList.s8 != "none")
+                    objList[8] = instrList.s8;
+                if (instrList.s9 != "none")
+                    objList[9] = instrList.s9;
+
+            //string objList[] = {instrList.s0,instrList.s1,instrList.s2,instrList.s3,instrList.s4,instrList.s5,
+            //                    instrList.s6,instrList.s7,instrList.s8,instrList.s9}; //instrList.s9
+
 
 
            //TODO
@@ -607,7 +659,7 @@ int main(int argc, char *argv[]) {
            // and operands/displacement labels
 
            string labels[] = {"START", "LOOP","","","LOOP2","","WAIT","","END","END"};
-           string opCodes[] = {"ADD", "CLEAR","SUB","TIX","DIV","MULT","JSUB","RSUB","STL","LDA"};
+           string instrParam[] = {"ADD", "CLEAR", "SUB", "TIX", "DIV", "MULT", "JSUB", "RSUB", "STL", "LDA"};
            string operands[] = {"LISTA", "LISTB","LISTC","MAXLEN","MIN","TOTAL","LISTA-LISTB","LISTB-LISTC+LISTA","FIRST","STORE"};
 
 
@@ -646,7 +698,7 @@ int main(int argc, char *argv[]) {
 
            //not sure if symtable needs them in decimal or hex to find and replace
            //fills in correct operand and converts from hex to decimal to display in file
-           for (int i = 0; i < 9; i++){
+           for (int i = 0; i < numInstructionsInRecord; i++){
                //gets displacement field
                operands[i] = extractDisplacement(objList[i]);
                //retrieves decimal form of operand to display
@@ -665,13 +717,13 @@ int main(int argc, char *argv[]) {
             //need to do this as many times are there are instructions in each record
             //possibly make arrays of all that need to be passed in for all instructions in the record, then pass array vals in loop
             cout << endl;
-            for (int i = 0; i < 9; i++){
+            for (int i = 0; i < numInstructionsInRecord; i++){
 
                 //This statement generates a string with SIC format
-                string sicOutString = printToSICFile(labels[i], opCodes[i], operands[i],"This is a comment.",objList[i]);
+                string sicOutString = printToSICFile(labels[i], instrParam[i], operands[i], "This is a comment.", objList[i]);
 
                 //This statement generates a string with LIS format
-                string lisOutString = printToLISFile(addresses[i],labels[i], opCodes[i], operands[i], objList[i]);
+                string lisOutString = printToLISFile(addresses[i], labels[i], instrParam[i], operands[i], objList[i]);
 
                 //Statements below show SIC and LIS output in console (Having both on at once not recommended for readability's sake)
                 //cout << sicOutString << endl;
