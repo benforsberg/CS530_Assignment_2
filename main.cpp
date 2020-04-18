@@ -22,16 +22,16 @@ struct flags {
 };
 
 struct instructionList {
-    string s0;
-    string s1;
-    string s2;
-    string s3;
-    string s4;
-    string s5;
-    string s6;
-    string s7;
-    string s8;
-    string s9;
+    string s0 = "none";
+    string s1 = "none";
+    string s2 = "none";
+    string s3 = "none";
+    string s4 = "none";
+    string s5 = "none";
+    string s6 = "none";
+    string s7 = "none";
+    string s8 = "none";
+    string s9 = "none";
     //strings that keep track of each instruction's format
     string form0;
     string form1;
@@ -488,8 +488,9 @@ int main(int argc, char *argv[]) {
             bool isEmpty5 = instrList.s5.empty();
             bool isEmpty6 = instrList.s6.empty();
             bool isEmpty7 = instrList.s7.empty();
-            bool isEmpty8 = instrList.s8.empty();
-            bool isEmpty9 = instrList.s9.empty();*/
+            bool isEmpty8 = instrList.s8.empty();*/
+            bool isEmpty9 = instrList.s9.empty();
+            cout << isEmpty9 << endl;
 
 
            //TODO
@@ -497,10 +498,28 @@ int main(int argc, char *argv[]) {
            //need address calculation, labels pulled from symtable, literal detection,
            // and operands/displacement field function integrated
 
+
            string addresses[] = {"0000", "0003","0006","0009","000C","000E","0012","0015","0018","001B"};
-           string labels[] = {"START", "LOOP","HI","","LOOP2","","WAIT","STORE","","END"};
+           string labels[] = {"START", "LOOP","","","LOOP2","","WAIT","","END","END"};
            string opCodes[] = {"ADD", "CLEAR","SUB","TIX","DIV","MULT","JSUB","RSUB","STL","LDA"};
            string operands[] = {"LISTA", "LISTB","LISTC","MAXLEN","MIN","TOTAL","LISTA-LISTB","LISTB-LISTC+LISTA","FIRST","STORE"};
+
+
+           //not sure if symtable needs them in decimal or hex to find and replace
+           //fills in correct operand and converts from hex to decimal to display in file
+           for (int i = 0; i < 9; i++){
+               //gets displacement field
+               operands[i] = extractDisplacement(objList[i]);
+               //retrieves decimal form of operand to display
+               int num = Opcode::hexToInt(operands[i]);
+               cout <<"Hex to int for: " << operands[i] << " is " << to_string(num) <<endl;
+               operands[i] = to_string(num);
+           }
+
+           //need to read symtable and compare operands with contents
+
+
+
 
 
             //need to do this as many times are there are instructions in each record
@@ -515,19 +534,22 @@ int main(int argc, char *argv[]) {
                 string lisOutString = printToLISFile(addresses[i],labels[i], opCodes[i], operands[i], objList[i]);
 
                 //Statements below show SIC and LIS output in console (Having both on at once not recommended for readability's sake)
-                cout  << lisOutString << endl;
                 //cout << sicOutString << endl;
+                cout  << lisOutString << endl;
 
                 //Writes both strings to their respective files
-                lisOutput << lisOutString << endl;
                 sicOutput << sicOutString << endl;
-
+                lisOutput << lisOutString << endl;
             }
 
             //debug testing known immediate and indirect instructions to test function
             cout << "\nTesting addressing modes" << endl;
             cout << addressingMode("022030") << endl;
             cout << addressingMode("010030") <<  "\n"<< endl;
+
+            cout << "\nTesting displacement extraction" << endl;
+            cout << extractDisplacement("022030") << endl;
+            cout << extractDisplacement("010030") <<  "\n"<< endl;
         }
 
         if (record.at(0) == 'M') {
