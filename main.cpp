@@ -345,7 +345,7 @@ vector<string> addressesLoc(string startAddr, instructionList instructions) {
         }
     }
     
-
+    //printing out the loc addresses for testing purposes
     std::cout << "The contents of addrLoc:";
     for (std::vector<string>::iterator it = addrLoc.begin(); it != addrLoc.end(); ++it)
         std::cout << ' ' << *it;
