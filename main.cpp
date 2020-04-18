@@ -551,7 +551,33 @@ int main(int argc, char *argv[]) {
         if (count == 2) {
             strtAdrsAndLngth = record;
             startingAddress = strtAdrsAndLngth.substr(0, 6);
+
+            cout<< "Starting address:" << startingAddress <<endl;
             programLength = strtAdrsAndLngth.substr(6,6);
+            string zeroAddr = startingAddress;
+
+            cout<< "Program length:" << programLength <<endl;
+
+            string sicTitleLine;
+            string lisTitleLine;
+            while (programName.size() < 9){
+                programName  = programName + " ";
+            }
+            string lisStart = programName;
+            lisStart.pop_back();
+
+            if (zeroAddr == "000000") {
+                sicTitleLine = programName + "START  " + " 0";
+                lisTitleLine = lisStart + "START   " + " 0";
+            }
+
+            else {
+                sicTitleLine = programName + "START   " + startingAddress;
+                lisTitleLine = lisStart + "START    " + startingAddress;
+            }
+
+            sicOutput << sicTitleLine << endl;
+            lisOutput << lisTitleLine << endl;
             continue;
         }
 
@@ -584,6 +610,9 @@ int main(int argc, char *argv[]) {
            string opCodes[] = {"ADD", "CLEAR","SUB","TIX","DIV","MULT","JSUB","RSUB","STL","LDA"};
            string operands[] = {"LISTA", "LISTB","LISTC","MAXLEN","MIN","TOTAL","LISTA-LISTB","LISTB-LISTC+LISTA","FIRST","STORE"};
 
+
+
+           //program not able to handle starting address larger than FFFF due to 4 digit limit
            //Populating location addresses
             vector<string> addressesLIS = addressesLoc(startingAddress, instrList);
 
@@ -605,7 +634,7 @@ int main(int argc, char *argv[]) {
                 }
                 buffer = cap[0] + cap[1] + cap[2] + cap[3];
                 addresses[i] = buffer;
-                cout << "Buffer" << buffer << endl;
+                //cout << "Buffer" << buffer << endl;
 
                 if (i == (addressesLIS.size() -1)){
                     finalAddress = buffer;
@@ -622,7 +651,7 @@ int main(int argc, char *argv[]) {
                operands[i] = extractDisplacement(objList[i]);
                //retrieves decimal form of operand to display
                int num = Opcode::hexToInt(operands[i]);
-               cout <<"Hex to int for: " << operands[i] << " is " << to_string(num) <<endl;
+               //cout <<"Hex to int for: " << operands[i] << " is " << to_string(num) <<endl;
                operands[i] = to_string(num);
            }
 
@@ -654,13 +683,13 @@ int main(int argc, char *argv[]) {
             }
 
             //debug testing known immediate and indirect instructions to test function
-            cout << "\nTesting addressing modes" << endl;
-            cout << addressingMode("022030") << endl;
-            cout << addressingMode("010030") <<  "\n"<< endl;
-
-            cout << "\nTesting displacement extraction" << endl;
-            cout << extractDisplacement("022030") << endl;
-            cout << extractDisplacement("010030") <<  "\n"<< endl;
+//            cout << "\nTesting addressing modes" << endl;
+//            cout << addressingMode("022030") << endl;
+//            cout << addressingMode("010030") <<  "\n"<< endl;
+//
+//            cout << "\nTesting displacement extraction" << endl;
+//            cout << extractDisplacement("022030") << endl;
+//            cout << extractDisplacement("010030") <<  "\n"<< endl;
 
                 startingAddress = finalAddress ;//needs to equal last address of text record
 
@@ -680,15 +709,9 @@ int main(int argc, char *argv[]) {
 
     }
 
-
-
     //testing addressesLoc function 
     instructionList testing= parseInstructions("T0000001E0500000320033F691017911BA0131BC0002F200A3B2FF40F10");
     //addressesLoc(startingAddress, testing);
-
-    //debug
-    cout <<"Starting address of program " << programName <<" is " << startingAddress << endl;
-    cout <<"Length of program " << programName <<" is " << programLength << endl;
 
     //closes all filestreams
     objInput.close();
