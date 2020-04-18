@@ -143,206 +143,44 @@ string int_to_hex( int b )
 //function that returns the array of Loc adresses (lis files on the left)
 //startAddr has 6 charecters!
 vector<string> addressesLoc(string startAddr, instructionList instructions) {
+    string form[10];
+    form[0] = instructions.form0;
+    form[1] = instructions.form1;
+    form[2] = instructions.form2;
+    form[3] = instructions.form3;
+    form[4] = instructions.form4;
+    form[5] = instructions.form5;
+    form[6] = instructions.form6;
+    form[7] = instructions.form7;
+    form[8] = instructions.form8;
+    form[9] = instructions.form9;
     vector<string> addrLoc; //this will hold Loc addresses
     int intAddr = Opcode::hexToInt(startAddr);
     addrLoc.push_back(startAddr.substr(2, 6)); //loads first address 
-    if (instructions.s0!= "none") {
-        if (instructions.form0 == "1"){
+
+    for (int i = 0; i<10; i++) {
+    if (form[i] != "none") {
+        if (form[i] == "1"){
             intAddr += 1;
             string newAddr = int_to_hex(intAddr);
             addrLoc.push_back(newAddr);
         }
-        else if (instructions.form0 == "2"){
+        else if (form[i] == "2"){
             intAddr += 2;
             string newAddr = int_to_hex(intAddr);
             addrLoc.push_back(newAddr);
         }
-        else if (instructions.form0 == "3"){
+        else if (form[i] == "3"){
             intAddr += 3;
             string newAddr = int_to_hex(intAddr);
             addrLoc.push_back(newAddr);
         }
-        else if (instructions.form0 == "4"){
+        else if (form[i] == "4"){
             intAddr += 4;
             string newAddr = int_to_hex(intAddr);
             addrLoc.push_back(newAddr);
         }
     }
-    if (instructions.s1!= "none") {
-        if (instructions.form0 == "1"){
-            intAddr += 1;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-        else if (instructions.form0 == "2"){
-            intAddr += 2;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-        else if (instructions.form0 == "3"){
-            intAddr += 3;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-        else if (instructions.form0 == "4"){
-            intAddr += 4;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-    }
-    if (instructions.s2!= "none") {
-        if (instructions.form0 == "1"){
-            intAddr += 1;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-        else if (instructions.form0 == "2"){
-            intAddr += 2;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-        else if (instructions.form0 == "3"){
-            intAddr += 3;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-        else if (instructions.form0 == "4"){
-            intAddr += 4;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-    }
-    if (instructions.s3!= "none") {
-        if (instructions.form0 == "1"){
-            intAddr += 1;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-        else if (instructions.form0 == "2"){
-            intAddr += 2;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-        else if (instructions.form0 == "3"){
-            intAddr += 3;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-        else if (instructions.form0 == "4"){
-            intAddr += 4;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-    }
-    if (instructions.s4!= "none") {
-        if (instructions.form0 == "1"){
-            intAddr += 1;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-        else if (instructions.form0 == "2"){
-            intAddr += 2;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-        else if (instructions.form0 == "3"){
-            intAddr += 3;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-        else if (instructions.form0 == "4"){
-            intAddr += 4;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-    }
-    if (instructions.s5!= "none") {
-        if (instructions.form0 == "1"){
-            intAddr += 1;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-        else if (instructions.form0 == "2"){
-            intAddr += 2;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-        else if (instructions.form0 == "3"){
-            intAddr += 3;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-        else if (instructions.form0 == "4"){
-            intAddr += 4;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-    }
-    if (instructions.s6!= "none") {
-        if (instructions.form0 == "1"){
-            intAddr += 1;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-        else if (instructions.form0 == "2"){
-            intAddr += 2;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-        else if (instructions.form0 == "3"){
-            intAddr += 3;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-        else if (instructions.form0 == "4"){
-            intAddr += 4;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-    }
-    if (instructions.s7!= "none") {
-        if (instructions.form0 == "1"){
-            intAddr += 1;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-        else if (instructions.form0 == "2"){
-            intAddr += 2;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-        else if (instructions.form0 == "3"){
-            intAddr += 3;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-        else if (instructions.form0 == "4"){
-            intAddr += 4;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-    }
-    if (instructions.s9!= "none") {
-        if (instructions.form0 == "1"){
-            intAddr += 1;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-        else if (instructions.form0 == "2"){
-            intAddr += 2;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-        else if (instructions.form0 == "3"){
-            intAddr += 3;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-        else if (instructions.form0 == "4"){
-            intAddr += 4;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
     }
     
     //printing out the loc addresses for testing purposes
