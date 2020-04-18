@@ -146,7 +146,6 @@ vector<string> addressesLoc(string startAddr, instructionList instructions) {
     vector<string> addrLoc; //this will hold Loc addresses
     int intAddr = Opcode::hexToInt(startAddr);
     addrLoc.push_back(startAddr.substr(2, 6)); //loads first address 
-    cout << "\nthis is int to hex " << int_to_hex(98) <<"\n";;
     if (instructions.s0!= "none") {
         if (instructions.form0 == "1"){
             intAddr += 1;
