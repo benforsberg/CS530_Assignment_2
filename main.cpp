@@ -162,8 +162,8 @@ string int_to_hex( int b )
   return stream.str();
 }
 
-//function that returns the array of Loc adresses (lis files on the left)
-//startAddr has 6 charecters!
+//function that returns the array of Loc addresses (lis files on the left)
+//startAddr has 6 characters!
 vector<string> addressesLoc(string startAddr, instructionList instructions) {
     string form[10];
     form[0] = instructions.form0;
@@ -205,12 +205,12 @@ vector<string> addressesLoc(string startAddr, instructionList instructions) {
     }
     }
     
-    //printing out the loc addresses for testing purposes
-    std::cout << "The contents of addrLoc:";
+    /*//printing out the loc addresses for testing purposes
+    std::cout << "The contents of addrLoc:" << endl;
     for (std::vector<string>::iterator it = addrLoc.begin(); it != addrLoc.end(); ++it)
-        std::cout << ' ' << *it;
+        std::cout << ' ' << *it << endl;
     std::cout << '\n';
-
+*/
     return addrLoc;
 }
 
@@ -535,6 +535,10 @@ int main(int argc, char *argv[]) {
     // extracts records from the file
     //meant to do all steps of disassembly each time a new record is found
     //take each text record, break it into individual instructions, then do process on each instruction from that record
+
+    //used to store address throughout different text records
+    //string currentAddress;
+
     while (objInput >> record) {
         if (count == 0 ){
             programName = record;
@@ -570,30 +574,45 @@ int main(int argc, char *argv[]) {
             //code to check if an instruction exists
             //might need to be used for stopping array out of bounds error if different # of instructions than expected
 
-            //cout << "S8 is empty?: " << isEmpty8<<endl;
-             /* bool isEmpty0 = instrList.s0.empty();
-            bool isEmpty1 = instrList.s1.empty();
-            bool isEmpty2 = instrList.s2.empty();
-            bool isEmpty3 = instrList.s3.empty();
-            bool isEmpty4 = instrList.s4.empty();
-            bool isEmpty5 = instrList.s5.empty();
-            bool isEmpty6 = instrList.s6.empty();
-            bool isEmpty7 = instrList.s7.empty();
-            bool isEmpty8 = instrList.s8.empty();*/
-            bool isEmpty9 = instrList.s9.empty();
-            cout << isEmpty9 << endl;
-
 
            //TODO
-           //Test data hardcoded for now, need to write code to populate these
-           //need address calculation, labels pulled from symtable, literal detection,
-           // and operands/displacement field function integrated
+           //need instructions
+           // need labels pulled from symtable, literal detection,
+           // and operands/displacement labels
 
-
-           string addresses[] = {"0000", "0003","0006","0009","000C","000E","0012","0015","0018","001B"};
            string labels[] = {"START", "LOOP","","","LOOP2","","WAIT","","END","END"};
            string opCodes[] = {"ADD", "CLEAR","SUB","TIX","DIV","MULT","JSUB","RSUB","STL","LDA"};
            string operands[] = {"LISTA", "LISTB","LISTC","MAXLEN","MIN","TOTAL","LISTA-LISTB","LISTB-LISTC+LISTA","FIRST","STORE"};
+
+           //Populating location addresses
+            vector<string> addressesLIS = addressesLoc(startingAddress, instrList);
+
+            string addresses[addressesLIS.size()];
+            string buffer;
+            string finalAddress;
+
+            //puts addresses from vector into array after capitalizing them
+            for (int i = 0; i < addressesLIS.size(); i++){
+                buffer = addressesLIS[i];
+                //holds each char in address to have toupper() run on it
+                string cap[4];
+                int ctr =0;
+
+                for(char x: buffer) {
+                    x = toupper(x);
+                    cap[ctr] = x;
+                    ctr++;
+                }
+                buffer = cap[0] + cap[1] + cap[2] + cap[3];
+                addresses[i] = buffer;
+                cout << "Buffer" << buffer << endl;
+
+                if (i == (addressesLIS.size() -1)){
+                    finalAddress = buffer;
+                }
+            }
+
+
 
 
            //not sure if symtable needs them in decimal or hex to find and replace
@@ -607,6 +626,7 @@ int main(int argc, char *argv[]) {
                operands[i] = to_string(num);
            }
 
+           //TODO
            //need to read symtable and compare operands with contents
 
 
@@ -641,6 +661,11 @@ int main(int argc, char *argv[]) {
             cout << "\nTesting displacement extraction" << endl;
             cout << extractDisplacement("022030") << endl;
             cout << extractDisplacement("010030") <<  "\n"<< endl;
+
+                startingAddress = finalAddress ;//needs to equal last address of text record
+
+                cout << "Address for next text record starts at: " << startingAddress << endl;
+
         }
 
         if (record.at(0) == 'M') {
@@ -659,7 +684,7 @@ int main(int argc, char *argv[]) {
 
     //testing addressesLoc function 
     instructionList testing= parseInstructions("T0000001E0500000320033F691017911BA0131BC0002F200A3B2FF40F10");
-    addressesLoc(startingAddress, testing);
+    //addressesLoc(startingAddress, testing);
 
     //debug
     cout <<"Starting address of program " << programName <<" is " << startingAddress << endl;

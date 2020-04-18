@@ -1,9 +1,0 @@
-START    ADD    #0                 This is a comment.               
-LOOP     CLEAR   3                 This is a comment.               
-         SUB     2320              This is a comment.               
-        +TIX     72608             This is a comment.               
-LOOP2   +DIV     770048            This is a comment.               
-         MULT    10                This is a comment.               
-WAIT     JSUB    4084              This is a comment.               
-        +RSUB    12033             This is a comment.               
-END      STL     0                 This is a comment.               

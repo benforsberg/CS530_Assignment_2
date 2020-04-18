@@ -1,9 +1,0 @@
-0000    START    ADD     #0                        050000  
-0003    LOOP     CLEAR    3                        032003  
-0006             SUB      2320                     3F6910  
-0009            +TIX      72608                    17911BA0
-000C    LOOP2   +DIV      770048                   131BC000
-000E             MULT     10                       2F200A  
-0012    WAIT     JSUB     4084                     3B2FF4  
-0015            +RSUB     12033                    0F102F01
-0018    END      STL      0                        4F0000  
