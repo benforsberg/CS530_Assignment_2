@@ -26,27 +26,27 @@ struct flags {
 };
 
 struct instructionList {
-    string s0 = "none";
-    string s1 = "none";
-    string s2 = "none";
-    string s3 = "none";
-    string s4 = "none";
-    string s5 = "none";
-    string s6 = "none";
-    string s7 = "none";
-    string s8 = "none";
-    string s9 = "none";
+    string s0;
+    string s1;
+    string s2;
+    string s3;
+    string s4;
+    string s5;
+    string s6;
+    string s7;
+    string s8;
+    string s9;
     //strings that keep track of each instruction's format
-    string form0 = "none";
-    string form1 = "none";
-    string form2 = "none";
-    string form3 = "none";
-    string form4 = "none";
-    string form5 = "none";
-    string form6 = "none";
-    string form7 = "none";
-    string form8 = "none";
-    string form9 = "none";
+    string form0;
+    string form1;
+    string form2;
+    string form3;
+    string form4;
+    string form5;
+    string form6;
+    string form7;
+    string form8;
+    string form9;
 };
 
 flags extractFlags(string instr) {
@@ -82,6 +82,28 @@ instructionList parseInstructions(string textRec) {
 
     instruction = textRec.substr(pos, 6); //The first instruction
     xbpe = extractFlags(instruction);  //Taking flags of the instruction to know its format
+
+    form[0] = "none";
+    form[1] = "none";
+    form[2] = "none";
+    form[3] = "none";
+    form[4] = "none";
+    form[5] = "none";
+    form[6] = "none";
+    form[7] = "none";
+    form[8] = "none";
+    form[9] = "none";
+
+    parsedInstr[0] = "none";
+    parsedInstr[1] = "none";
+    parsedInstr[2] = "none";
+    parsedInstr[3] = "none";
+    parsedInstr[4] = "none";
+    parsedInstr[5] = "none";
+    parsedInstr[6] = "none";
+    parsedInstr[7] = "none";
+    parsedInstr[8] = "none";
+    parsedInstr[9] = "none";
 
     for (int i = 0; i < sizeof(parsedInstr); i++) {
         if (Opcode::getFormats(Opcode::getOpcode(instruction.substr(0,2))) == "1") { //Format == 1
@@ -636,7 +658,7 @@ int main(int argc, char *argv[]) {
 
 
     //testing addressesLoc function 
-    instructionList testing= parseInstructions("T0000001E0500000320033F691017911BA0131BC0002F200A3B2FF40F102F014F0000640111");
+    instructionList testing= parseInstructions("T0000001E0500000320033F691017911BA0131BC0002F200A3B2FF40F10");
     addressesLoc(startingAddress, testing);
 
     //debug
