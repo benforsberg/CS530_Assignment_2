@@ -17,6 +17,7 @@ public:
     static int hexToInt(string value);//takes a string of 2 (hex)charecters and returns int
     struct flags;
     struct instructionList;
+
 };
 
 
