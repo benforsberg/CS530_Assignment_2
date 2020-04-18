@@ -584,8 +584,7 @@ int main(int argc, char *argv[]) {
             continue;
         }
 
-        //reads first char of each line to determine record type
-        //need to add logic for each type in its respective if statement
+        //if statements read first char of each line to determine record type
         if (record.at(0) == 'H') {
             //cout << "Found a header record" << endl;
             //cout << record << endl;
@@ -650,14 +649,13 @@ int main(int argc, char *argv[]) {
 
             //hardcoded for now, these all must be gone before we're finished
             string labels[] = {"START", "LOOP", "", "", "LOOP2", "", "WAIT", "", "END", "END"};
-            string instructions [numInstructionsInRecord]; //= {"ADD", "CLEAR", "SUB", "TIX", "DIV", "MULT", "JSUB", "RSUB", "STL", "LDA"};
             string operands[] = {"LISTA", "LISTB", "LISTC", "MAXLEN", "MIN", "TOTAL", "LISTA-LISTB",
                                  "LISTB-LISTC+LISTA", "FIRST", "STORE"};
 
+            string instructions [numInstructionsInRecord];
 
 
-            //TODO
-            // need instructions field filled in for output
+            //loop to populate the instruction name array
             for (int i = 0; i < numInstructionsInRecord; i++) {
                 //gets correct opcode for instruction
                 string codeResult = Opcode::getOpcode(objList[i]);
@@ -666,11 +664,10 @@ int main(int argc, char *argv[]) {
                 //returns opcode name to put in array
                 string instrName = Opcode::getInstruction(index);
                 instructions[i] = instrName;
-
             }
 
             //program not able to handle starting address larger than FFFF due to 4 digit limit
-            //Populating location addresses
+            //Generates addresses for location column for instructions in this text record
             vector<string> addressesLIS = addressesLoc(startingAddress, instrList);
 
             string addresses[addressesLIS.size()];
@@ -696,7 +693,6 @@ int main(int argc, char *argv[]) {
                 }
                 buffer = cap[0] + cap[1] + cap[2] + cap[3];
                 addresses[i] = buffer;
-                //cout << "Buffer" << buffer << endl;
 
                 if (i == (addressesLIS.size() - 1)) {
                     finalAddress = buffer;
@@ -711,9 +707,9 @@ int main(int argc, char *argv[]) {
                 //gets displacement field
                 operands[i] = extractDisplacement(objList[i]);
                 //retrieves decimal form of operand to display
-                //int num = Opcode::hexToInt(operands[i]);
+                int num = Opcode::hexToInt(operands[i]);
                 //cout <<"Hex to int for: " << operands[i] << " is " << to_string(num) <<endl;
-                //operands[i] = to_string(num);
+                operands[i] = to_string(num);
             }
 
 
@@ -729,8 +725,7 @@ int main(int argc, char *argv[]) {
 
 
 
-            //need to do this as many times are there are instructions in each record
-            //possibly make arrays of all that need to be passed in for all instructions in the record, then pass array vals in loop
+            //Does this as many times are there are instructions in each record
             cout << endl;
             for (int i = 0; i < numInstructionsInRecord; i++) {
 
@@ -751,29 +746,39 @@ int main(int argc, char *argv[]) {
             }
 
             //debug testing known immediate and indirect instructions to test function
-//            cout << "\nTesting addressing modes" << endl;
-//            cout << addressingMode("022030") << endl;
- //           cout << addressingMode("010030") <<  "\n"<< endl;
-//
-//            cout << "\nTesting displacement extraction" << endl;
-//            cout << extractDisplacement("022030") << endl;
-//            cout << extractDisplacement("010030") <<  "\n"<< endl;
+            /*cout << "\nTesting addressing modes" << endl;
+            cout << addressingMode("022030") << endl;
+            cout << addressingMode("010030") <<  "\n"<< endl;
 
-            startingAddress = finalAddress;//needs to equal last address of text record
+            cout << "\nTesting displacement extraction" << endl;
+            cout << extractDisplacement("022030") << endl;
+            cout << extractDisplacement("010030") <<  "\n"<< endl;*/
 
-            //cout << "\nAddress for next text record starts at: " << startingAddress << endl;
+            //saves last address to know where to start for next text record
+            startingAddress = finalAddress;
+
         }
 
+        //Can access the mod record in this loop
         if (record.at(0) == 'M') {
             //cout << "Found a modification record" << endl;
-            cout << "\n" << record << endl;
+            //cout << "\n" << record << endl;
         }
 
+        //Can access the end record in this loop
         if (record.at(0) == 'E') {
             //cout << "Found an end record" << endl;
-            cout << "\n" << record << endl;
+            //cout << "\n" << record << endl;
         }
     }
+
+    cout << "\n\nTODO:\n" << endl;
+    cout << "- Need to read symtable, fill in symbol column, compare operands with symtable and replace them." << endl;
+    cout << "- Need to do literal detection and replacement, including adding lines using correct EQU and LTORG instructions." << endl;
+    cout << "- Would need to check if each operand contains a literal before calling print statements." << endl;
+
+
+
 
     //closes all filestreams
     objInput.close();
