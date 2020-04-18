@@ -383,11 +383,11 @@ string printToLISFile(string lineAddr, string symName, string opCode, string ope
     int extValue = flag.e;
     int indirectValue = 0;
     int immediateValue = 0;
-    //debug
 
+    //debug
     //cout << "\nAddressing type: " <<addressingMode(objCode) << endl;
 
-    if (addressingMode(objCode).substr(0,9) =="iNdirect"){
+    if (addressingMode(objCode).substr(0,8) =="iNdirect"){
         indirectValue = 1;
     }
     if (addressingMode(objCode).substr(0,9) =="Immediate"){
@@ -540,9 +540,9 @@ int main(int argc, char *argv[]) {
     //string currentAddress;
 
     while (objInput >> record) {
-        if (count == 0 ){
+        if (count == 0) {
             programName = record;
-            programName = programName.substr (1);
+            programName = programName.substr(1);
             cout << "\nProgram Name is: " << programName << endl;
         }
 
@@ -552,17 +552,17 @@ int main(int argc, char *argv[]) {
             strtAdrsAndLngth = record;
             startingAddress = strtAdrsAndLngth.substr(0, 6);
 
-            cout<< "Starting address:" << startingAddress <<endl;
-            programLength = strtAdrsAndLngth.substr(6,6);
+            cout << "Starting address:" << startingAddress << endl;
+            programLength = strtAdrsAndLngth.substr(6, 6);
             string zeroAddr = startingAddress;
 
-            cout<< "Program length:" << programLength <<endl;
+            cout << "Program length:" << programLength << endl;
 
             //makes title lines for SIC and LIS files
             string sicTitleLine;
             string lisTitleLine;
-            while (programName.size() < 9){
-                programName  = programName + " ";
+            while (programName.size() < 9) {
+                programName = programName + " ";
             }
             //for correct formatting
             string lisStart = programName;
@@ -571,9 +571,7 @@ int main(int argc, char *argv[]) {
             if (zeroAddr == "000000") {
                 sicTitleLine = programName + "START  " + " 0";
                 lisTitleLine = "0000    " + programName + "START   " + " 0";
-            }
-
-            else {
+            } else {
                 sicTitleLine = programName + "START   " + startingAddress;
                 lisTitleLine = lisStart + "START    " + startingAddress;
             }
@@ -598,74 +596,75 @@ int main(int argc, char *argv[]) {
 
             int numInstructionsInRecord = 0;
 
-            //control size of objList array 2 parts, have counter of how many instructions present in record
-            //part 1 check each s# if == "none"
-            //if != inc counter for arr size
+            //control size of objList array: 2 parts, have counter of how many instructions present in record
+            //part 1 if s# != "none" then increase counter
 
-                if (instrList.s0 != "none")
-                    numInstructionsInRecord++;
-                if (instrList.s1 != "none")
-                    numInstructionsInRecord++;
-                if (instrList.s2 != "none")
-                    numInstructionsInRecord++;
-                if (instrList.s3 != "none")
-                    numInstructionsInRecord++;
-                if (instrList.s4 != "none")
-                    numInstructionsInRecord++;
-                if (instrList.s5 != "none")
-                    numInstructionsInRecord++;
-                if (instrList.s6 != "none")
-                    numInstructionsInRecord++;
-                if (instrList.s7 != "none")
-                    numInstructionsInRecord++;
-                if (instrList.s8 != "none")
-                    numInstructionsInRecord++;
-                if (instrList.s9 != "none")
-                    numInstructionsInRecord++;
+            if (instrList.s0 != "none")
+                numInstructionsInRecord++;
+            if (instrList.s1 != "none")
+                numInstructionsInRecord++;
+            if (instrList.s2 != "none")
+                numInstructionsInRecord++;
+            if (instrList.s3 != "none")
+                numInstructionsInRecord++;
+            if (instrList.s4 != "none")
+                numInstructionsInRecord++;
+            if (instrList.s5 != "none")
+                numInstructionsInRecord++;
+            if (instrList.s6 != "none")
+                numInstructionsInRecord++;
+            if (instrList.s7 != "none")
+                numInstructionsInRecord++;
+            if (instrList.s8 != "none")
+                numInstructionsInRecord++;
+            if (instrList.s9 != "none")
+                numInstructionsInRecord++;
 
             //makes array of instructions of correct size;
             string objList[numInstructionsInRecord];
 
-            //part 2 if s# != "none" add to objCode[i]
-                if (instrList.s0 != "none")
-                    objList[0] = instrList.s0;
-                if (instrList.s1 != "none")
-                    objList[1] = instrList.s1;
-                if (instrList.s2 != "none")
-                    objList[2] = instrList.s2;
-                if (instrList.s3 != "none")
-                    objList[3] = instrList.s3;
-                if (instrList.s4 != "none")
-                    objList[4] = instrList.s4;
-                if (instrList.s5 != "none")
-                    objList[5] = instrList.s5;
-                if (instrList.s6 != "none")
-                    objList[6] = instrList.s6;
-                if (instrList.s7 != "none")
-                    objList[7] = instrList.s7;
-                if (instrList.s8 != "none")
-                    objList[8] = instrList.s8;
-                if (instrList.s9 != "none")
-                    objList[9] = instrList.s9;
+            //part 2 if that instruction exists add to objCode[i]
+            if (instrList.s0 != "none")
+                objList[0] = instrList.s0;
+            if (instrList.s1 != "none")
+                objList[1] = instrList.s1;
+            if (instrList.s2 != "none")
+                objList[2] = instrList.s2;
+            if (instrList.s3 != "none")
+                objList[3] = instrList.s3;
+            if (instrList.s4 != "none")
+                objList[4] = instrList.s4;
+            if (instrList.s5 != "none")
+                objList[5] = instrList.s5;
+            if (instrList.s6 != "none")
+                objList[6] = instrList.s6;
+            if (instrList.s7 != "none")
+                objList[7] = instrList.s7;
+            if (instrList.s8 != "none")
+                objList[8] = instrList.s8;
+            if (instrList.s9 != "none")
+                objList[9] = instrList.s9;
 
-            //string objList[] = {instrList.s0,instrList.s1,instrList.s2,instrList.s3,instrList.s4,instrList.s5,
-            //                    instrList.s6,instrList.s7,instrList.s8,instrList.s9}; //instrList.s9
+            //hardcoded for now, these all must be gone before we're finished
+            string labels[] = {"START", "LOOP", "", "", "LOOP2", "", "WAIT", "", "END", "END"};
+            string instrParam[] = {"ADD", "CLEAR", "SUB", "TIX", "DIV", "MULT", "JSUB", "RSUB", "STL", "LDA"};
+            string operands[] = {"LISTA", "LISTB", "LISTC", "MAXLEN", "MIN", "TOTAL", "LISTA-LISTB",
+                                 "LISTB-LISTC+LISTA", "FIRST", "STORE"};
 
-
-
-           //TODO
-           //need instructions
-           // need labels pulled from symtable, literal detection,
-           // and operands/displacement labels
-
-           string labels[] = {"START", "LOOP","","","LOOP2","","WAIT","","END","END"};
-           string instrParam[] = {"ADD", "CLEAR", "SUB", "TIX", "DIV", "MULT", "JSUB", "RSUB", "STL", "LDA"};
-           string operands[] = {"LISTA", "LISTB","LISTC","MAXLEN","MIN","TOTAL","LISTA-LISTB","LISTB-LISTC+LISTA","FIRST","STORE"};
+            //TODO
+            // need instructions field filled in for output
 
 
+            //TODO
+            // need labels pulled from symtable, literal detection,
+            // and operands/displacement labels
 
-           //program not able to handle starting address larger than FFFF due to 4 digit limit
-           //Populating location addresses
+
+
+
+
+            //program not able to handle starting address larger than FFFF due to 4 digit limit
+            //Populating location addresses
             vector<string> addressesLIS = addressesLoc(startingAddress, instrList);
 
             string addresses[addressesLIS.size()];
@@ -673,13 +672,13 @@ int main(int argc, char *argv[]) {
             string finalAddress;
 
             //puts addresses from vector into array after capitalizing them
-            for (int i = 0; i < addressesLIS.size(); i++){
+            for (int i = 0; i < addressesLIS.size(); i++) {
                 buffer = addressesLIS[i];
                 //holds each char in address to have toupper() run on it
                 string cap[4];
-                int ctr =0;
+                int ctr = 0;
 
-                for(char x: buffer) {
+                for (char x: buffer) {
                     x = toupper(x);
                     cap[ctr] = x;
                     ctr++;
@@ -688,7 +687,7 @@ int main(int argc, char *argv[]) {
                 addresses[i] = buffer;
                 //cout << "Buffer" << buffer << endl;
 
-                if (i == (addressesLIS.size() -1)){
+                if (i == (addressesLIS.size() - 1)) {
                     finalAddress = buffer;
                 }
             }
@@ -696,19 +695,19 @@ int main(int argc, char *argv[]) {
 
 
 
-           //not sure if symtable needs them in decimal or hex to find and replace
-           //fills in correct operand and converts from hex to decimal to display in file
-           for (int i = 0; i < numInstructionsInRecord; i++){
-               //gets displacement field
-               operands[i] = extractDisplacement(objList[i]);
-               //retrieves decimal form of operand to display
-               int num = Opcode::hexToInt(operands[i]);
-               //cout <<"Hex to int for: " << operands[i] << " is " << to_string(num) <<endl;
-               operands[i] = to_string(num);
-           }
+            //not sure if symtable needs them in decimal or hex to find and replace
+            //fills in correct operand and converts from hex to decimal to display in file
+            for (int i = 0; i < numInstructionsInRecord; i++) {
+                //gets displacement field
+                operands[i] = extractDisplacement(objList[i]);
+                //retrieves decimal form of operand to display
+                int num = Opcode::hexToInt(operands[i]);
+                //cout <<"Hex to int for: " << operands[i] << " is " << to_string(num) <<endl;
+                operands[i] = to_string(num);
+            }
 
-           //TODO
-           //need to read symtable and compare operands with contents
+            //TODO
+            //need to read symtable and compare operands with contents
 
 
 
@@ -717,17 +716,18 @@ int main(int argc, char *argv[]) {
             //need to do this as many times are there are instructions in each record
             //possibly make arrays of all that need to be passed in for all instructions in the record, then pass array vals in loop
             cout << endl;
-            for (int i = 0; i < numInstructionsInRecord; i++){
+            for (int i = 0; i < numInstructionsInRecord; i++) {
 
                 //This statement generates a string with SIC format
-                string sicOutString = printToSICFile(labels[i], instrParam[i], operands[i], "This is a comment.", objList[i]);
+                string sicOutString = printToSICFile(labels[i], instrParam[i], operands[i], "This is a comment.",
+                                                     objList[i]);
 
                 //This statement generates a string with LIS format
                 string lisOutString = printToLISFile(addresses[i], labels[i], instrParam[i], operands[i], objList[i]);
 
                 //Statements below show SIC and LIS output in console (Having both on at once not recommended for readability's sake)
                 //cout << sicOutString << endl;
-                cout  << lisOutString << endl;
+                cout << lisOutString << endl;
 
                 //Writes both strings to their respective files
                 sicOutput << sicOutString << endl;
@@ -735,18 +735,17 @@ int main(int argc, char *argv[]) {
             }
 
             //debug testing known immediate and indirect instructions to test function
-//            cout << "\nTesting addressing modes" << endl;
-//            cout << addressingMode("022030") << endl;
-//            cout << addressingMode("010030") <<  "\n"<< endl;
+            cout << "\nTesting addressing modes" << endl;
+            cout << addressingMode("022030") << endl;
+            cout << addressingMode("010030") <<  "\n"<< endl;
 //
 //            cout << "\nTesting displacement extraction" << endl;
 //            cout << extractDisplacement("022030") << endl;
 //            cout << extractDisplacement("010030") <<  "\n"<< endl;
 
-                startingAddress = finalAddress ;//needs to equal last address of text record
+            startingAddress = finalAddress;//needs to equal last address of text record
 
-                cout << "Address for next text record starts at: " << startingAddress << endl;
-
+            cout << "\nAddress for next text record starts at: " << startingAddress << endl;
         }
 
         if (record.at(0) == 'M') {
@@ -758,12 +757,7 @@ int main(int argc, char *argv[]) {
             cout << "Found an end record" << endl;
             cout << record << endl;
         }
-
     }
-
-    //testing addressesLoc function 
-    instructionList testing= parseInstructions("T0000001E0500000320033F691017911BA0131BC0002F200A3B2FF40F10");
-    //addressesLoc(startingAddress, testing);
 
     //closes all filestreams
     objInput.close();
