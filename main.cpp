@@ -552,11 +552,11 @@ int main(int argc, char *argv[]) {
             strtAdrsAndLngth = record;
             startingAddress = strtAdrsAndLngth.substr(0, 6);
 
-            cout << "Starting address:" << startingAddress << endl;
+            cout << "Starting address: " << startingAddress << endl;
             programLength = strtAdrsAndLngth.substr(6, 6);
             string zeroAddr = startingAddress;
 
-            cout << "Program length:" << programLength << endl;
+            cout << "Program length: " << programLength << endl;
 
             //makes title lines for SIC and LIS files
             string sicTitleLine;
@@ -576,6 +576,9 @@ int main(int argc, char *argv[]) {
                 lisTitleLine = lisStart + "START    " + startingAddress;
             }
 
+            //cout << sicTitleLine << endl;
+            //cout << lisTitleLine << endl;
+
             sicOutput << sicTitleLine << endl;
             lisOutput << lisTitleLine << endl;
             continue;
@@ -584,12 +587,12 @@ int main(int argc, char *argv[]) {
         //reads first char of each line to determine record type
         //need to add logic for each type in its respective if statement
         if (record.at(0) == 'H') {
-            cout << "Found a header record" << endl;
-            cout << record << endl;
+            //cout << "Found a header record" << endl;
+            //cout << record << endl;
         }
 
         if (record.at(0) == 'T') {
-            cout << "Found a text record" << endl;
+            //cout << "Found a text record" << endl;
 
             //Makes array of instructions returned from the struct
             instructionList instrList = parseInstructions(record);
@@ -647,21 +650,24 @@ int main(int argc, char *argv[]) {
 
             //hardcoded for now, these all must be gone before we're finished
             string labels[] = {"START", "LOOP", "", "", "LOOP2", "", "WAIT", "", "END", "END"};
-            string instrParam[] = {"ADD", "CLEAR", "SUB", "TIX", "DIV", "MULT", "JSUB", "RSUB", "STL", "LDA"};
+            string instructions [numInstructionsInRecord]; //= {"ADD", "CLEAR", "SUB", "TIX", "DIV", "MULT", "JSUB", "RSUB", "STL", "LDA"};
             string operands[] = {"LISTA", "LISTB", "LISTC", "MAXLEN", "MIN", "TOTAL", "LISTA-LISTB",
                                  "LISTB-LISTC+LISTA", "FIRST", "STORE"};
 
+
+
             //TODO
             // need instructions field filled in for output
+            for (int i = 0; i < numInstructionsInRecord; i++) {
+                //gets correct opcode for instruction
+                string codeResult = Opcode::getOpcode(objList[i]);
+                //gets index of code in table
+                int index = Opcode::findOpcode(codeResult);
+                //returns opcode name to put in array
+                string instrName = Opcode::getInstruction(index);
+                instructions[i] = instrName;
 
-
-            //TODO
-            // need labels pulled from symtable, literal detection,
-            // and operands/displacement labels
-
-
-
-
+            }
 
             //program not able to handle starting address larger than FFFF due to 4 digit limit
             //Populating location addresses
@@ -674,8 +680,13 @@ int main(int argc, char *argv[]) {
             //puts addresses from vector into array after capitalizing them
             for (int i = 0; i < addressesLIS.size(); i++) {
                 buffer = addressesLIS[i];
+
+                //fixes issue where first address in each record would be only 2 digits
+                if (buffer.size() != 4){
+                    buffer = "00" + buffer;
+                }
                 //holds each char in address to have toupper() run on it
-                string cap[4];
+                string cap[] = { "0","0","0","0"};
                 int ctr = 0;
 
                 for (char x: buffer) {
@@ -694,20 +705,25 @@ int main(int argc, char *argv[]) {
 
 
 
-
-            //not sure if symtable needs them in decimal or hex to find and replace
+            //TODO check if need to be in hex or decimal for label replacement
             //fills in correct operand and converts from hex to decimal to display in file
             for (int i = 0; i < numInstructionsInRecord; i++) {
                 //gets displacement field
                 operands[i] = extractDisplacement(objList[i]);
                 //retrieves decimal form of operand to display
-                int num = Opcode::hexToInt(operands[i]);
+                //int num = Opcode::hexToInt(operands[i]);
                 //cout <<"Hex to int for: " << operands[i] << " is " << to_string(num) <<endl;
-                operands[i] = to_string(num);
+                //operands[i] = to_string(num);
             }
 
+
+
             //TODO
-            //need to read symtable and compare operands with contents
+            // need to read symtable, fill in symbol column, compare operands with symtable and replace them.
+            // need to include literal detection and replacement as well,
+            // including adding lines using correct EQU and LTORG instructions.
+            // would need to check if each operand contains a literal before calling print statements and
+            // call helper function to do this.
 
 
 
@@ -719,11 +735,11 @@ int main(int argc, char *argv[]) {
             for (int i = 0; i < numInstructionsInRecord; i++) {
 
                 //This statement generates a string with SIC format
-                string sicOutString = printToSICFile(labels[i], instrParam[i], operands[i], "This is a comment.",
+                string sicOutString = printToSICFile(labels[i], instructions[i], operands[i], "This is a comment.",
                                                      objList[i]);
 
                 //This statement generates a string with LIS format
-                string lisOutString = printToLISFile(addresses[i], labels[i], instrParam[i], operands[i], objList[i]);
+                string lisOutString = printToLISFile(addresses[i], labels[i], instructions[i], operands[i], objList[i]);
 
                 //Statements below show SIC and LIS output in console (Having both on at once not recommended for readability's sake)
                 //cout << sicOutString << endl;
@@ -735,9 +751,9 @@ int main(int argc, char *argv[]) {
             }
 
             //debug testing known immediate and indirect instructions to test function
-            cout << "\nTesting addressing modes" << endl;
-            cout << addressingMode("022030") << endl;
-            cout << addressingMode("010030") <<  "\n"<< endl;
+//            cout << "\nTesting addressing modes" << endl;
+//            cout << addressingMode("022030") << endl;
+ //           cout << addressingMode("010030") <<  "\n"<< endl;
 //
 //            cout << "\nTesting displacement extraction" << endl;
 //            cout << extractDisplacement("022030") << endl;
@@ -745,17 +761,17 @@ int main(int argc, char *argv[]) {
 
             startingAddress = finalAddress;//needs to equal last address of text record
 
-            cout << "\nAddress for next text record starts at: " << startingAddress << endl;
+            //cout << "\nAddress for next text record starts at: " << startingAddress << endl;
         }
 
         if (record.at(0) == 'M') {
-            cout << "Found a modification record" << endl;
-            cout << record << endl;
+            //cout << "Found a modification record" << endl;
+            cout << "\n" << record << endl;
         }
 
         if (record.at(0) == 'E') {
-            cout << "Found an end record" << endl;
-            cout << record << endl;
+            //cout << "Found an end record" << endl;
+            cout << "\n" << record << endl;
         }
     }
 
