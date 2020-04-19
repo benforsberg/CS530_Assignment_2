@@ -473,7 +473,7 @@ vector<string> labelsWithLoc(string fileName) {
 //          =X'3F'     2    000003
 
     //printing out the loc addresses for testing purposes
-    std::cout << "The contents of string vector that labelsWith Loc function returns is :" << endl;
+    std::cout << "The contents of string vector that labelsWith Loc function returns is: " << endl;
     for (std::vector<string>::iterator it = answer.begin(); it != answer.end(); ++it)
         std::cout << *it << endl;
     std::cout << '\n';
@@ -704,29 +704,36 @@ int main(int argc, char *argv[]) {
             for (int i = 0; i < addressesLIS.size(); i++) {
                 buffer = addressesLIS[i];
 
+                std::locale loc;
+                for (std::string::size_type j=0; j < buffer.length(); ++j) {
+                    buffer[j] = toupper(buffer[j], loc);
+                }
+
+
                 //fixes issue where first address in each record would be only 2 digits
                 if (buffer.size() != 4){
                     buffer = "00" + buffer;
                 }
-                //holds each char in address to have toupper() run on it
+               /* //holds each char in address to have toupper() run on it
                 string cap[] = { "0","0","0","0"};
                 int ctr = 0;
-
+*/
                 //need to rewrite as a for loop since edoras doesn't like it
-                for (char x: buffer) {
+                /*for (char x: buffer) {
                     x = toupper(x);
                     cap[ctr] = x;
                     ctr++;
-                }
-
+                }*/
+                /*string digit  ="";
                 for (int i = 0; i < buffer.size(); i++){
+                     digit  ="";
+                    digit = buffer[i].
+                }*/
 
-                }
 
 
 
-
-                buffer = cap[0] + cap[1] + cap[2] + cap[3];
+               // buffer = cap[0] + cap[1] + cap[2] + cap[3];
                 addresses[i] = buffer;
 
                 if (i == (addressesLIS.size() - 1)) {
