@@ -765,6 +765,15 @@ int main(int argc, char *argv[]) {
                 //Writes both strings to their respective files
                 sicOutput << sicOutString << endl;
                 lisOutput << lisOutString << endl;
+
+                //PRINT "BASE" ASSEMBLER DIRECTIVE (parse objList)
+                if (Opcode::getOpcode(objList[i].substr(0,2)) == "68") { //If instruction == "LDB"
+                    string sicBaseString = printToSICFile("      ", "BASE  ", operands[i], " ", " ");
+                    string lisBaseString = printToLISFile(addresses[i], "  ", "BASE  ", operands[i], " ");
+
+                    sicOutput << sicBaseString << endl;
+                    lisOutput << lisBaseString << endl;
+                } 
             }
 
             //debug testing known immediate and indirect instructions to test function
