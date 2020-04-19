@@ -446,7 +446,7 @@ string printToLISFile(string lineAddr, string symName, string opCode, string ope
 //reads Symtable and returns vector of strings (each string represents label and its Loc address). Loc address (first 4 charecters of string) and the labels names (last 6 charecters a string) 
 vector<string> labelsWithLoc(string fileName) {
     ifstream symtab;
-    symtab.open(fileName);
+    symtab.open(fileName.c_str());
     vector<string> answer;
     string str;
     while (std::getline(symtab, str)) { //reading symtable line by line
@@ -484,7 +484,7 @@ vector<string> labelsWithLoc(string fileName) {
 //reads Symtable and returns vector of strings (each string represents literal and its Loc address). Loc address (first 4 charecters of string) and the literal names (last 8 charecters a string) 
 vector<string> literalsWithLoc(string fileName) {
     ifstream symtab;
-    symtab.open(fileName);
+    symtab.open(fileName.c_str());
     vector<string> answer;
     string str;
     while (std::getline(symtab, str)) { //reading symtable line by line
