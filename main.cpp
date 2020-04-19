@@ -506,9 +506,6 @@ vector<string> literalsWithLoc(string fileName) {
 }
 
 
-
-
-
 int main(int argc, char *argv[]) {
 
 
@@ -919,8 +916,38 @@ int main(int argc, char *argv[]) {
             // reverse array again for easy printing
             // then make a print method and call from here
 
+            int labelSize = labelArr->size();
+            string tempAddr[labelSize];
+            string templabel[labelSize];
+            int j= labelSize;
 
-            //cout << "Completed RESB/RESW loop!" << endl;
+            for (int i = 0; i < labelSize; i++){
+                tempAddr[i] = labelAddressArr[j - 1];
+                templabel[i] = labelArr[j - 1];
+                j--;
+            }
+            for (int i = 0; i < labelSize; i++) {
+                labelAddressArr[i] = tempAddr[i];
+                labelArr[i] = templabel[i];
+                cout << "Reversed Array Addresses: " << labelAddressArr[i] <<endl;
+                cout << "Reversed Array Labels: " << labelArr[i] <<endl;
+            }
+
+            //need to only use arr elements starting at this point since priors have already been printed.
+            cout << "finalAddress: " << finalAddress << endl;
+            int resStartAddr;
+            int sizeToPrint;
+            for (int i = 0; i < labelSize; i++) {
+            if (labelAddressArr[i] == finalAddress)
+                resStartAddr = i;
+            }
+            sizeToPrint = labelSize - resStartAddr;
+            cout << "# res lines to print " << sizeToPrint<< endl;
+
+            
+
+
+            cout << "Completed RESB/RESW loop!" << endl;
 
 
             //cout << "Size of arrays: " <<(sizeof(labelAddressArr) + sizeof(labelArr) + sizeof(objList) + sizeof(operands) + sizeof(labels) + sizeof(addresses) + sizeof(instructions)) / 1024 << " MB" <<endl;
