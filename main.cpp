@@ -481,6 +481,31 @@ vector<string> labelsWithLoc(string fileName) {
   return answer;
 }
 
+//reads Symtable and returns vector of strings (each string represents literal and its Loc address). Loc address (first 4 charecters of string) and the literal names (last 8 charecters a string) 
+vector<string> literalsWithLoc(string fileName) {
+    ifstream symtab;
+    symtab.open(fileName);
+    vector<string> answer;
+    string str;
+    while (std::getline(symtab, str)) { //reading symtable line by line
+        if (str.length() > 15) {
+            if (str.length() > 15 && str.substr(8, 1) == "=" && str.substr(24, 2) == "00") { //checking that there is value and an indication of realtive addressing in the lin we are reading
+                string literalLoc = str.substr(26,4) + str.substr(8, 6);
+                answer.push_back(literalLoc);
+            }
+        }
+    }
+    symtab.close();
+
+    //printing out the loc addresses for testing purposes
+    std::cout << "The contents of string vector that literalsWithLoc function returns is :" << endl;
+    for (std::vector<string>::iterator it = answer.begin(); it != answer.end(); ++it)
+        std::cout << *it << endl;
+    std::cout << '\n';
+
+  return answer;
+}
+
 
 int main(int argc, char *argv[]) {
 
@@ -505,8 +530,12 @@ int main(int argc, char *argv[]) {
     sicFileName = sicExt.append(".sic");
     lisFileName = lisExt.append(".lis");
 
-    //reading symtable and returning a vector of strings with labels and Loc addresses here!!
+    //reading symtable and returning a vector of strings with labels and Loc addresses here!
+    //first 4 charecters are Loc addresses, last 6 charecters are labels
     labelsWithLoc(symFileName);
+    //reading symtable and returning a vector of strings with literals and Loc addresses here!!
+    //first 4 charecters are Loc addresses, last 6 charecters are labels
+    literalsWithLoc(symFileName);
 
     ifstream objInput;
     ifstream symInput;
