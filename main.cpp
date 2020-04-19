@@ -755,8 +755,8 @@ int main(int argc, char *argv[]) {
             for (int i =0; i< sizeOp; i++ ) { 
                 cout << "here is opperands " + operands[i] + "\n";
 
-            vector<string> labels = labelsWithLoc(symFileName);
-            for (vector<string>::iterator it = labels.begin(); it != labels.end(); ++it) {
+            vector<string> labelsM = labelsWithLoc(symFileName);
+            for (vector<string>::iterator it = labelsM.begin(); it != labelsM.end(); ++it) {
                     if (operands[i].length() == 5) {
                         string loc = operands[i].substr(1,4); //this will get last 4 chars that represent the address in the displacement(operends) to be changed 
                         string labelSym = *it;
