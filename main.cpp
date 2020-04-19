@@ -458,19 +458,6 @@ vector<string> labelsWithLoc(string fileName) {
     }
     symtab.close();
 
-//    Symbol  Value   Flags:
-//  -----------------------
-//  FIRST   000000  R
-//  LOOP    00000B  R
-//  COUNT   00001E  R
-//  TABLE   000021  R
-//  TABLE2  001791  R
-//  TOTAL   002F01  R
-
-//  Name    Literal  Length Address:
-//  ------------------------------
-//          =X'3F'     2    000003
-
 /*    //printing out the loc addresses for testing purposes
     std::cout << "The contents of string vector that labelsWith Loc function returns is: " << endl;
     for (std::vector<string>::iterator it = answer.begin(); it != answer.end(); ++it)
@@ -762,6 +749,23 @@ int main(int argc, char *argv[]) {
                 //int num = Opcode::hexToInt(operands[i]);
                 //cout <<"Hex to int for: " << operands[i] << " is " << to_string(num) <<endl;
                 //operands[i] = to_string(num);
+            }
+            ///Marina marina analyse displacements and fill the labels in if possible
+            int sizeOp = sizeof(operands)/sizeof(*operands);
+            for (int i =0; i< sizeOp; i++ ) { 
+                cout << "here is opperands " + operands[i] + "\n";
+
+            vector<string> labels = labelsWithLoc(symFileName);
+            for (vector<string>::iterator it = labels.begin(); it != labels.end(); ++it) {
+                    if (operands[i].length() == 5) {
+                        string loc = operands[i].substr(1,4); //this will get last 4 chars that represent the address in the displacement(operends) to be changed 
+                        string labelSym = *it;
+                        string labelSymLoc = labelSym.substr(0, 4);
+                        if (labelSymLoc == loc) {
+                            operands[i] = labelSym.substr(4, 6); //this changes displacement to the label of the loc address of the label is equal to the displacment 
+                        }
+                    }
+                }
             }
 
 
