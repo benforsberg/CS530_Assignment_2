@@ -1,0 +1,10 @@
+0000    SUM      START    0
+0000    START    LDX     #0                        050000  
+0003    LOOP     LDA      3                        032003  
+0006             J        2320                     3F6910  
+0009            +STL      72608                    17911BA0
+000D    LOOP2   +STX      770048                   131BC000
+0011             TIX      10                       2F200A  
+0014    WAIT     JLT      4084                     3B2FF4  
+0017            +STA      12033                    0F102F01
+001B    END      RSUB     0                        4F0000  

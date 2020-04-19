@@ -1,0 +1,10 @@
+SUM      START   0
+START    LDX    #0                 This is a comment.               
+LOOP     LDA     3                 This is a comment.               
+         J       2320              This is a comment.               
+        +STL     72608             This is a comment.               
+LOOP2   +STX     770048            This is a comment.               
+         TIX     10                This is a comment.               
+WAIT     JLT     4084              This is a comment.               
+        +STA     12033             This is a comment.               
+END      RSUB    0                 This is a comment.               

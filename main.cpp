@@ -298,7 +298,6 @@ string printToSICFile(string sicLabel, string opCode, string sicOperand, string 
     //col 7-8
     string spaceChars1 = "  ";
     //col 9
-
     string isExtended = " ";
     flags flag = extractFlags(objCode);
     int extValue = flag.e;
@@ -444,26 +443,46 @@ string printToLISFile(string lineAddr, string symName, string opCode, string ope
     return lisOutString;
 }
 
+//reads Symtable and returns vector of strings (each string represents label and its Loc address). Loc address (first 4 charecters of string) and the labels names (last 6 charecters a string) 
+vector<string> labelsWithLoc(string fileName) {
+    ifstream symtab;
+    symtab.open(fileName);
+    vector<string> answer;
+    string str;
+    while (std::getline(symtab, str)) { //reading symtable line by line
+        if (str.length() > 15) {
+            if (str.length() > 15 && str.substr(8, 2) == "00" && str.substr(16, 1) == "R") { //checking that there is value and an indication of realtive addressing in the lin we are reading
+                string labelLoc = str.substr(10,4) + str.substr(0, 6);
+                answer.push_back(labelLoc);
+            }
+        }
+    }
+    symtab.close();
+
+//    Symbol  Value   Flags:
+//  -----------------------
+//  FIRST   000000  R
+//  LOOP    00000B  R
+//  COUNT   00001E  R
+//  TABLE   000021  R
+//  TABLE2  001791  R
+//  TOTAL   002F01  R
+
+//  Name    Literal  Length Address:
+//  ------------------------------
+//          =X'3F'     2    000003
+
+    //printing out the loc addresses for testing purposes
+    std::cout << "The contents of answer is :" << endl;
+    for (std::vector<string>::iterator it = answer.begin(); it != answer.end(); ++it)
+        std::cout << *it << endl;
+    std::cout << '\n';
+
+  return answer;
+}
 
 
 int main(int argc, char *argv[]) {
-
-    // //testing getOpcode function
-    // cout << "getOpcode for 04: " + Opcode::getOpcode("04") + "\n";
-
-    // //testing parseInstructions
-    // printInsrcList(parseInstructions("T0000001E0500000320033F691017911BA0131BC0002F200A3B2FF40F102F014F0000640111"));
-	
-    // //these two functions combined give you back the instruction given the opcode
-	// cout << Opcode::getInstruction(Opcode::findOpcode("34"));
-
-	// //this function Opcode::getFormats(sting: opcode) gives back formats: 1, 2, 3/4
-    // cout << " " + Opcode::getFormats("98");
-
-    // //testing stringToInt function that takes hex number as a string and returns int
-    // cout << "\n80 in hex is ";
-    // cout << Opcode::hexToInt("80");
-	// cout << " in decimal\n";
 
 
 	//Checks for correct arguments
@@ -485,6 +504,9 @@ int main(int argc, char *argv[]) {
     symFileName = fileNameNoExtension.append(".sym");
     sicFileName = sicExt.append(".sic");
     lisFileName = lisExt.append(".lis");
+
+    //reading symtable and returning a vector of strings with labels and Loc addresses here!!
+    labelsWithLoc(symFileName);
 
     ifstream objInput;
     ifstream symInput;
