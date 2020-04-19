@@ -473,7 +473,7 @@ vector<string> labelsWithLoc(string fileName) {
 //          =X'3F'     2    000003
 
     //printing out the loc addresses for testing purposes
-    std::cout << "The contents of answer is :" << endl;
+    std::cout << "The contents of string vector that labelsWith Loc function returns is :" << endl;
     for (std::vector<string>::iterator it = answer.begin(); it != answer.end(); ++it)
         std::cout << *it << endl;
     std::cout << '\n';
