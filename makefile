@@ -1,10 +1,10 @@
 CC = g++
 CFLAGS = -c
 
-dxe : main.o Opcode.o
-	${CC} Opcode.o main.o -o dxe
+dxe : main.o opcode.o
+	${CC} opcode.o main.o -o dxe
 
-Opcode.o : Opcode.cpp Opcode.h
+opcode.o : opcode.cpp opcode.h
 	${CC} ${CFLAGS} -c opcode.cpp
 	
 main.o : main.cpp

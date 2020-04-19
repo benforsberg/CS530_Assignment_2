@@ -12,7 +12,7 @@ Filename of this file: README
 #include <sstream>
 #include <stdlib.h>
 
-#include "Opcode.h"
+#include "opcode.h"
 using namespace std;
 
 /*structure to store opcodes*/

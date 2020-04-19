@@ -7,7 +7,6 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <array>
 #include <map>
 #include <algorithm>
 #include <vector>
@@ -472,11 +471,11 @@ vector<string> labelsWithLoc(string fileName) {
 //  ------------------------------
 //          =X'3F'     2    000003
 
-    //printing out the loc addresses for testing purposes
+/*    //printing out the loc addresses for testing purposes
     std::cout << "The contents of string vector that labelsWith Loc function returns is: " << endl;
     for (std::vector<string>::iterator it = answer.begin(); it != answer.end(); ++it)
         std::cout << *it << endl;
-    std::cout << '\n';
+    std::cout << '\n';*/
 
   return answer;
 }
@@ -740,12 +739,10 @@ int main(int argc, char *argv[]) {
                     buffer[j] = toupper(buffer[j], loc);
                 }
 
-
                 //fixes issue where first address in each record would be only 2 digits
                 if (buffer.size() != 4){
                     buffer = "00" + buffer;
                 }
-
 
                 addresses[i] = buffer;
 
@@ -770,14 +767,15 @@ int main(int argc, char *argv[]) {
 
 
             //TODO
-            // need to read symtable, fill in symbol column, compare operands with symtable and replace them.
             // need to include literal detection and replacement as well,
             // including adding lines using correct EQU and LTORG instructions.
             // would need to check if each operand contains a literal before calling print statements and
             // call helper function to do this.
 
+
+            //this section manages label placement
             vector<string> labelVector = labelsWithLoc(symFileName);
-            cout <<startingAddress << endl;
+            //cout <<startingAddress << endl;
 
             string labels[numInstructionsInRecord];
 
@@ -788,12 +786,12 @@ int main(int argc, char *argv[]) {
             for (int i = 0; i < labelVector.size(); i++) {
 
                 labelAddressArr[i] = labelVector[i].substr(0, 4);
-                cout << "labelAddressArr now is " << labelAddressArr[i] << endl;
+                cout << "labelAddressArr: " << labelAddressArr[i] << endl;
             }
             //puts labels into array from sym file
             for (int i = 0; i < labelVector.size(); i++) {
                 labelArr[i] = labelVector[i].substr(4, 6);
-                cout << "labelArr now is " << labelArr[i] << endl;
+                cout << "labelArr: " << labelArr[i] << endl;
             }
 
             //if an address for an instruction already generated matches one found in sym file
@@ -806,32 +804,6 @@ int main(int argc, char *argv[]) {
                     }
                 }
             }
-
-
-
-
-
-
-
-
-
-
-
-               /* for (int j = 0; j < numInstructionsInRecord; j++) {
-                    if (addresses[i] == labelAddressArr[j]) {
-                        labels[i] = labelAddressArr[j];
-                        cout << "!!Label now is " << labels[j] << endl;
-
-
-
-                        cout << "testing loop: " << (addresses[i] == labelAddressArr[i]) <<endl;
-                        cout << "testing addresses[i]: " << addresses[i]<<endl;
-                        cout << "testing labelAddressArr[i]: " << labelAddressArr[i]<<endl;
-
-                    }
-                }
-            }*/
-
 
 
 
@@ -857,12 +829,11 @@ int main(int argc, char *argv[]) {
                 sicOutput << sicOutString << endl;
                 lisOutput << lisOutString << endl;
 
-                //PRINT "BASE" ASSEMBLER DIRECTIVE (parse objList)
-                if (Opcode::getOpcode(objList[i]) == "68") { //If instruction == "LDB"
-                    //cout << "Inside dantes's loop" <<Opcode::getOpcode(objList[i])<<  endl;
+
+                //This prints the BASE line after a LDB instruction is found
+                if (Opcode::getOpcode(objList[i]) == "68") {
                     string basestring = "         BASE                 ";
                     string lisbasestring = addresses[i] + "             BASE";
-
 
                     sicOutput << basestring << endl;
                     lisOutput << lisbasestring << endl;
@@ -875,13 +846,19 @@ int main(int argc, char *argv[]) {
             //saves last address to know where to start for next text record
             startingAddress = finalAddress;
 
-            //TODO BEN TASK
-
-            //read in stuff from symtable in vector format ("4 chars addr + 6 chars label name"
+            //TODO BEN TASk
             // then work back from the end taking difference to get size of
             // that declaration then add label
-            //finalAddress will be where first RESB/RESW declaration starts
-            //need to save finalAddress again at end to end of prog/record
+            // finalAddress will be where first RESB/RESW declaration starts
+            // need to save finalAddress again at end to end of prog/record
+            //programLength = size
+
+            //stores current end of program to help with calculating resb/resw
+            string rearAddr = programLength;
+            cout <<"rearAddr: " <<rearAddr << endl;
+
+
+
 
 
         }
@@ -902,8 +879,7 @@ int main(int argc, char *argv[]) {
     }
 
     cout << "\n\nTODO:\n" << endl;
-    cout << "- Need to read symtable, fill in symbol column, compare operands with symtable and replace them." << endl;
-    cout << "- Need to do literal detection and replacement, including adding lines using correct EQU and LTORG instructions." << endl;
+    cout << "- Need to read symtable,do literal detection and replacement, including adding lines using correct EQU and LTORG instructions." << endl;
     cout << "- Would need to check if each operand contains a literal before calling print statements." << endl;
 
 
