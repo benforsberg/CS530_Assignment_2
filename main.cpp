@@ -481,7 +481,7 @@ vector<string> labelsWithLoc(string fileName) {
   return answer;
 }
 
-//reads Symtable and returns vector of strings (each string represents literal and its Loc address). Loc address (first 4 charecters of string) and the literal names (last 8 charecters a string) 
+//reads Symtable and returns vector of strings (each string represents literal and its Loc address). Loc address (first 4 characters of string) and the literal names (last 8 characters a string)
 vector<string> literalsWithLoc(string fileName) {
     ifstream symtab;
     symtab.open(fileName);
@@ -489,7 +489,7 @@ vector<string> literalsWithLoc(string fileName) {
     string str;
     while (std::getline(symtab, str)) { //reading symtable line by line
         if (str.length() > 15) {
-            if (str.length() > 15 && str.substr(8, 1) == "=" && str.substr(24, 2) == "00") { //checking that there is value and an indication of realtive addressing in the lin we are reading
+            if (str.length() > 15 && str.substr(8, 1) == "=" && str.substr(24, 2) == "00") { //checking that there is value and an indication of relative addressing in the lin we are reading
                 string literalLoc = str.substr(26,4) + str.substr(8, 6);
                 answer.push_back(literalLoc);
             }
@@ -533,9 +533,6 @@ int main(int argc, char *argv[]) {
     //reading symtable and returning a vector of strings with labels and Loc addresses here!
     //first 4 charecters are Loc addresses, last 6 charecters are labels
     labelsWithLoc(symFileName);
-    //reading symtable and returning a vector of strings with literals and Loc addresses here!!
-    //first 4 charecters are Loc addresses, last 6 charecters are labels
-    literalsWithLoc(symFileName);
 
     ifstream objInput;
     ifstream symInput;
@@ -583,6 +580,11 @@ int main(int argc, char *argv[]) {
         cout << "Sym file is empty!" << endl;
         exit(1);
     }
+
+    //can pass symInput from here on
+
+
+
 
     // extracts records from the file
     //meant to do all steps of disassembly each time a new record is found
@@ -702,7 +704,7 @@ int main(int argc, char *argv[]) {
                 objList[9] = instrList.s9;
 
             //hardcoded for now, these all must be gone before we're finished
-            string labels[] = {"", "LOOP", "", "", "LOOP2", "", "WAIT", "", "", ""};
+            //string labels[];
             string operands[] = {"LISTA", "LISTB", "LISTC", "MAXLEN", "MIN", "TOTAL", "LISTA-LISTB",
                                  "LISTB-LISTC+LISTA", "FIRST", "STORE"};
 
@@ -743,26 +745,8 @@ int main(int argc, char *argv[]) {
                 if (buffer.size() != 4){
                     buffer = "00" + buffer;
                 }
-               /* //holds each char in address to have toupper() run on it
-                string cap[] = { "0","0","0","0"};
-                int ctr = 0;
-*/
-                //need to rewrite as a for loop since edoras doesn't like it
-                /*for (char x: buffer) {
-                    x = toupper(x);
-                    cap[ctr] = x;
-                    ctr++;
-                }*/
-                /*string digit  ="";
-                for (int i = 0; i < buffer.size(); i++){
-                     digit  ="";
-                    digit = buffer[i].
-                }*/
 
 
-
-
-               // buffer = cap[0] + cap[1] + cap[2] + cap[3];
                 addresses[i] = buffer;
 
                 if (i == (addressesLIS.size() - 1)) {
@@ -792,6 +776,61 @@ int main(int argc, char *argv[]) {
             // would need to check if each operand contains a literal before calling print statements and
             // call helper function to do this.
 
+            vector<string> labelVector = labelsWithLoc(symFileName);
+            cout <<startingAddress << endl;
+
+            string labels[numInstructionsInRecord];
+
+            string labelAddressArr[labelVector.size()];
+            string labelArr[labelVector.size()];
+
+            //puts address of labels into array from sym file
+            for (int i = 0; i < labelVector.size(); i++) {
+
+                labelAddressArr[i] = labelVector[i].substr(0, 4);
+                cout << "labelAddressArr now is " << labelAddressArr[i] << endl;
+            }
+            //puts labels into array from sym file
+            for (int i = 0; i < labelVector.size(); i++) {
+                labelArr[i] = labelVector[i].substr(4, 6);
+                cout << "labelArr now is " << labelArr[i] << endl;
+            }
+
+            //if an address for an instruction already generated matches one found in sym file
+            // then set the label for that instruction to it;
+            for (int i = 0; i < numInstructionsInRecord; i++) {
+                for (int j = 0; j < labelVector.size(); j++) {
+                    if (addresses[i] == labelAddressArr[j]) {
+                        cout << "A correct spot for a label has been found" << endl;
+                        labels[i] = labelArr[j];
+                    }
+                }
+            }
+
+
+
+
+
+
+
+
+
+
+
+               /* for (int j = 0; j < numInstructionsInRecord; j++) {
+                    if (addresses[i] == labelAddressArr[j]) {
+                        labels[i] = labelAddressArr[j];
+                        cout << "!!Label now is " << labels[j] << endl;
+
+
+
+                        cout << "testing loop: " << (addresses[i] == labelAddressArr[i]) <<endl;
+                        cout << "testing addresses[i]: " << addresses[i]<<endl;
+                        cout << "testing labelAddressArr[i]: " << labelAddressArr[i]<<endl;
+
+                    }
+                }
+            }*/
 
 
 
@@ -818,12 +857,6 @@ int main(int argc, char *argv[]) {
                 sicOutput << sicOutString << endl;
                 lisOutput << lisOutString << endl;
 
-                //dante stuff here
-                // base stuff here by parsing objList[] via adressingmode()
-                //if an objlist[i] has base in it, cout "            BASE"
-
-
-                //.substr(0,2)
                 //PRINT "BASE" ASSEMBLER DIRECTIVE (parse objList)
                 if (Opcode::getOpcode(objList[i]) == "68") { //If instruction == "LDB"
                     //cout << "Inside dantes's loop" <<Opcode::getOpcode(objList[i])<<  endl;
@@ -838,15 +871,6 @@ int main(int argc, char *argv[]) {
                     cout << lisbasestring << endl;
                 }
             }
-
-            //debug testing known immediate and indirect instructions to test function
-            /*cout << "\nTesting addressing modes" << endl;
-            cout << addressingMode("022030") << endl;
-            cout << addressingMode("010030") <<  "\n"<< endl;
-
-            cout << "\nTesting displacement extraction" << endl;
-            cout << extractDisplacement("022030") << endl;
-            cout << extractDisplacement("010030") <<  "\n"<< endl;*/
 
             //saves last address to know where to start for next text record
             startingAddress = finalAddress;
