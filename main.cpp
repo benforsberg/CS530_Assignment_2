@@ -517,6 +517,7 @@ int main(int argc, char *argv[]) {
     string programName;
     string strtAdrsAndLngth;
     string startingAddress;
+    string actualstartAddress;
     string programLength;
     int count = 0;
 
@@ -577,6 +578,7 @@ int main(int argc, char *argv[]) {
             cout << "Starting address: " << startingAddress << endl;
             programLength = strtAdrsAndLngth.substr(6, 6);
             string zeroAddr = startingAddress;
+            actualstartAddress= startingAddress;
 
             cout << "Program length: " << programLength << endl;
 
@@ -588,7 +590,8 @@ int main(int argc, char *argv[]) {
             }
             //for correct formatting
             string lisStart = programName;
-            lisStart.pop_back();
+            lisStart = lisStart.substr(0, lisStart.size()-1);
+            //lisStart.pop_back();
 
             if (zeroAddr == "000000") {
                 sicTitleLine = programName + "START  " + " 0";
@@ -670,7 +673,7 @@ int main(int argc, char *argv[]) {
                 objList[9] = instrList.s9;
 
             //hardcoded for now, these all must be gone before we're finished
-            string labels[] = {"START", "LOOP", "", "", "LOOP2", "", "WAIT", "", "END", "END"};
+            string labels[] = {"", "LOOP", "", "", "LOOP2", "", "WAIT", "", "", ""};
             string operands[] = {"LISTA", "LISTB", "LISTC", "MAXLEN", "MIN", "TOTAL", "LISTA-LISTB",
                                  "LISTB-LISTC+LISTA", "FIRST", "STORE"};
 
@@ -694,6 +697,7 @@ int main(int argc, char *argv[]) {
 
             string addresses[addressesLIS.size()];
             string buffer;
+
             string finalAddress;
 
             //puts addresses from vector into array after capitalizing them
@@ -708,6 +712,7 @@ int main(int argc, char *argv[]) {
                 string cap[] = { "0","0","0","0"};
                 int ctr = 0;
 
+                //need to rewrite as a for loop since edoras doesn't like it
                 for (char x: buffer) {
                     x = toupper(x);
                     cap[ctr] = x;
@@ -729,9 +734,9 @@ int main(int argc, char *argv[]) {
                 //gets displacement field
                 operands[i] = extractDisplacement(objList[i]);
                 //retrieves decimal form of operand to display
-                int num = Opcode::hexToInt(operands[i]);
+                //int num = Opcode::hexToInt(operands[i]);
                 //cout <<"Hex to int for: " << operands[i] << " is " << to_string(num) <<endl;
-                operands[i] = to_string(num);
+                //operands[i] = to_string(num);
             }
 
 
@@ -751,12 +756,15 @@ int main(int argc, char *argv[]) {
             cout << endl;
             for (int i = 0; i < numInstructionsInRecord; i++) {
 
+
+
                 //This statement generates a string with SIC format
                 string sicOutString = printToSICFile(labels[i], instructions[i], operands[i], "This is a comment.",
                                                      objList[i]);
 
                 //This statement generates a string with LIS format
                 string lisOutString = printToLISFile(addresses[i], labels[i], instructions[i], operands[i], objList[i]);
+
 
                 //Statements below show SIC and LIS output in console (Having both on at once not recommended for readability's sake)
                 //cout << sicOutString << endl;
@@ -766,14 +774,25 @@ int main(int argc, char *argv[]) {
                 sicOutput << sicOutString << endl;
                 lisOutput << lisOutString << endl;
 
-                //PRINT "BASE" ASSEMBLER DIRECTIVE (parse objList)
-                if (Opcode::getOpcode(objList[i].substr(0,2)) == "68") { //If instruction == "LDB"
-                    string sicBaseString = printToSICFile("      ", "BASE  ", operands[i], " ", " ");
-                    string lisBaseString = printToLISFile(addresses[i], "  ", "BASE  ", operands[i], " ");
+                //dante stuff here
+                // base stuff here by parsing objList[] via adressingmode()
+                //if an objlist[i] has base in it, cout "            BASE"
 
-                    sicOutput << sicBaseString << endl;
-                    lisOutput << lisBaseString << endl;
-                } 
+
+                //.substr(0,2)
+                //PRINT "BASE" ASSEMBLER DIRECTIVE (parse objList)
+                if (Opcode::getOpcode(objList[i]) == "68") { //If instruction == "LDB"
+                    //cout << "Inside dantes's loop" <<Opcode::getOpcode(objList[i])<<  endl;
+                    string basestring = "                 BASE                 ";
+                    string lisbasestring = addresses[i] + "             BASE";
+
+
+                    sicOutput << basestring << endl;
+                    lisOutput << lisbasestring << endl;
+
+                    //debug
+                    cout << lisbasestring << endl;
+                }
             }
 
             //debug testing known immediate and indirect instructions to test function
@@ -788,6 +807,15 @@ int main(int argc, char *argv[]) {
             //saves last address to know where to start for next text record
             startingAddress = finalAddress;
 
+            //TODO BEN TASK
+
+            //read in stuff from symtable in vector format ("4 chars addr + 6 chars label name"
+            // then work back from the end taking difference to get size of
+            // that declaration then add label
+            //finalAddress will be where first RESB/RESW declaration starts
+            //need to save finalAddress again at end to end of prog/record
+
+
         }
 
         //Can access the mod record in this loop
@@ -799,7 +827,9 @@ int main(int argc, char *argv[]) {
         //Can access the end record in this loop
         if (record.at(0) == 'E') {
             //cout << "Found an end record" << endl;
-            //cout << "\n" << record << endl;
+            cout << "                 END      " + actualstartAddress << record << endl;
+            sicOutput << "         END     " + actualstartAddress<< endl;
+            lisOutput << "                 END      " + actualstartAddress<< endl;
         }
     }
 
