@@ -506,6 +506,9 @@ vector<string> literalsWithLoc(string fileName) {
 }
 
 
+
+
+
 int main(int argc, char *argv[]) {
 
 
@@ -786,21 +789,26 @@ int main(int argc, char *argv[]) {
             for (int i = 0; i < labelVector.size(); i++) {
 
                 labelAddressArr[i] = labelVector[i].substr(0, 4);
-                cout << "labelAddressArr: " << labelAddressArr[i] << endl;
+                //cout << "labelAddressArr: " << labelAddressArr[i] << endl;
             }
             //puts labels into array from sym file
             for (int i = 0; i < labelVector.size(); i++) {
                 labelArr[i] = labelVector[i].substr(4, 6);
-                cout << "labelArr: " << labelArr[i] << endl;
+                //cout << "labelArr: " << labelArr[i] << endl;
             }
+
+            //tracks what # label has been printed already
+            int labelptr;
 
             //if an address for an instruction already generated matches one found in sym file
             // then set the label for that instruction to it;
             for (int i = 0; i < numInstructionsInRecord; i++) {
                 for (int j = 0; j < labelVector.size(); j++) {
                     if (addresses[i] == labelAddressArr[j]) {
-                        cout << "A correct spot for a label has been found" << endl;
+                        //cout << "A correct spot for a label has been found" << endl;
                         labels[i] = labelArr[j];
+                        labelptr++;
+                        //cout << "Have done " << labelptr << " label(s)" << endl;
                     }
                 }
             }
@@ -853,14 +861,59 @@ int main(int argc, char *argv[]) {
             // need to save finalAddress again at end to end of prog/record
             //programLength = size
 
+            //reverses labelvector for ease of calculations
+            reverse(labelVector.begin(),labelVector.end());
+            for (int i = 0; i < labelVector.size(); i++) {
+
+                labelAddressArr[i] = labelVector[i].substr(0, 4);
+                //cout << "labelAddressArr: " << labelAddressArr[i] << endl;
+            }
+            for (int i = 0; i < labelVector.size(); i++) {
+                labelArr[i] = labelVector[i].substr(4, 6);
+                //cout << "labelArr: " << labelArr[i] << endl;
+            }
+
+            int instrSizeInt;
+            string instrSize;
+
+            //string secondToLast = labelAddressArr[arrlen];
             //stores current end of program to help with calculating resb/resw
             string rearAddr = programLength;
-            cout <<"rearAddr: " <<rearAddr << endl;
+            int rearAddrInt = Opcode::hexToInt(rearAddr);
+
+            //sets to last labeled element
+            //cout <<"last label " << labelAddressArr[0] <<endl;
+            int arrayValInt = Opcode::hexToInt(labelAddressArr[0]);
 
 
+            int arrCtr = 0;
+            string arrayVal= labelAddressArr[0];
 
 
+            //TODO I need to call print method from in this loop for this
+            for (int i = 0; i < labelArr->size(); i++){
+                //instrSizeInt will be operand, will need to determine if bytes/words
+                instrSizeInt = rearAddrInt - arrayValInt;
+                instrSize = int_to_hex(instrSizeInt);
+                //cout << "Size of RES label in decimal " << labelAddressArr[arrCtr] << " is: "<<instrSizeInt << " bytes/words." <<endl;
+                //cout << "Size of RES label in hex " << labelAddressArr[arrCtr] << " is: "<<instrSize << " bytes/words." <<endl;
+                if (instrSizeInt % 3 == 0){
+                    cout <<  labelAddressArr[arrCtr] << " is: "<<instrSizeInt / 3 << " word(s)." <<endl;
+                }
+                else{
+                    cout << labelAddressArr[arrCtr] << " is: "<<instrSizeInt << " byte(s)." <<endl;
+                }
+                rearAddr = arrayVal;
 
+                //stops from trying to go out of bounds
+                if(arrCtr <= i) {
+                    arrCtr++;
+                    arrayVal = labelAddressArr[arrCtr];
+                    rearAddrInt = Opcode::hexToInt(rearAddr);
+                    arrayValInt = Opcode::hexToInt(arrayVal);
+                }
+            }
+            //cout << "Completed RESB/RESW loop!" << endl;
         }
 
         //Can access the mod record in this loop
