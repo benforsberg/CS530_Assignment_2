@@ -718,6 +718,14 @@ int main(int argc, char *argv[]) {
                     cap[ctr] = x;
                     ctr++;
                 }
+
+                for (int i = 0; i < buffer.size(); i++){
+
+                }
+
+
+
+
                 buffer = cap[0] + cap[1] + cap[2] + cap[3];
                 addresses[i] = buffer;
 
@@ -783,7 +791,7 @@ int main(int argc, char *argv[]) {
                 //PRINT "BASE" ASSEMBLER DIRECTIVE (parse objList)
                 if (Opcode::getOpcode(objList[i]) == "68") { //If instruction == "LDB"
                     //cout << "Inside dantes's loop" <<Opcode::getOpcode(objList[i])<<  endl;
-                    string basestring = "                 BASE                 ";
+                    string basestring = "         BASE                 ";
                     string lisbasestring = addresses[i] + "             BASE";
 
 
@@ -827,7 +835,7 @@ int main(int argc, char *argv[]) {
         //Can access the end record in this loop
         if (record.at(0) == 'E') {
             //cout << "Found an end record" << endl;
-            cout << "                 END      " + actualstartAddress << record << endl;
+            cout << "                 END      " + actualstartAddress << endl;
             sicOutput << "         END     " + actualstartAddress<< endl;
             lisOutput << "                 END      " + actualstartAddress<< endl;
         }
