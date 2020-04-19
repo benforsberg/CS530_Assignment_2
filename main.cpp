@@ -913,7 +913,17 @@ int main(int argc, char *argv[]) {
                     arrayValInt = Opcode::hexToInt(arrayVal);
                 }
             }
+            //TODO
+            // need to add stuff inside there into array
+            // need to check mem allocations for leak
+            // reverse array again for easy printing
+            // then make a print method and call from here
+
+
             //cout << "Completed RESB/RESW loop!" << endl;
+
+
+            //cout << "Size of arrays: " <<(sizeof(labelAddressArr) + sizeof(labelArr) + sizeof(objList) + sizeof(operands) + sizeof(labels) + sizeof(addresses) + sizeof(instructions)) / 1024 << " MB" <<endl;
         }
 
         //Can access the mod record in this loop
