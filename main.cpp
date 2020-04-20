@@ -246,7 +246,7 @@ string addressingMode(string instr) {
         if (f.e == 1) { //FORMAT == 4; Always Direct Addressing (Never Base- nor PC-relative)
             if (difference == 3) //Simple Addressing
                 if (f.x == 1) //Indexing
-                    mode = "Simple & Direct Addressing (Indexing).";
+                    mode = "Simple & Direct Addressing (Indexing).I";
                 else //No Indexing
                     mode = "Simple & Direct Addressing.";
             else if (difference == 2) //iNdirect Addressing
@@ -257,11 +257,11 @@ string addressingMode(string instr) {
             if (difference == 3) { //Simple Addressing
                 if (f.x == 1) { //Indexing
                     if (f.b == 1) //Base-relative
-                        mode = "Simple Addressing (Indexing & Base-relative).";
+                        mode = "Simple Addressing (Indexing & Base-relative).I";
                     else if (f.p == 1)  //PC-relative
-                        mode = "Simple Addressing (Indexing & PC-relative).";
+                        mode = "Simple Addressing (Indexing & PC-relative).I";
                     else  //Neither Base- nor PC-Relative
-                        mode = "Simple & Direct Addressing (Indexing).";
+                        mode = "Simple & Direct Addressing (Indexing).I";
                 } else { //No indexing
                     if (f.b == 1)  //Base-relative
                         mode = "Simple Addressing (Base-relative).";
@@ -299,6 +299,7 @@ string printToSICFile(string sicLabel, string opCode, string sicOperand, string 
     //col 9
     string isExtended = " ";
     string operandSymbol = " ";
+    string operandSymbolIndex = " ";
 
     //Stops this from being called when RESB/W is being printed
     if (hasOpcodes) {
@@ -314,6 +315,11 @@ string printToSICFile(string sicLabel, string opCode, string sicOperand, string 
         }
         if (addressingMode(objCode).substr(0, 9) == "Immediate") {
             immediateValue = 1;
+        }
+
+        int lastChar = addressingMode(objCode).length() - 1;
+        if (addressingMode(objCode).substr(lastChar, 1) == "I") {
+            sicOperand = sicOperand  + ",X";
         }
 
         if (extValue == 1)
@@ -358,7 +364,7 @@ string printToSICFile(string sicLabel, string opCode, string sicOperand, string 
     }
 
     //full SIC output line to be written to file
-    string sicOutString = label + spaceChars1 + isExtended + opCodeString + space + operandSymbol + operand + comments;
+    string sicOutString = label + spaceChars1 + isExtended + opCodeString + space + operandSymbol + operand + operandSymbolIndex + comments;
     return sicOutString;
 
 }
@@ -378,6 +384,7 @@ string printToLISFile(string lineAddr, string symName, string opCode, string ope
     //col 17 special + symbol
     string isExtended = " ";
     string operandSymbol = " ";
+    string operandSymbolINdex = " ";
 
     //Stops this from being called when RESB/W is being printed
     if (hasOpcodes) {
@@ -391,6 +398,11 @@ string printToLISFile(string lineAddr, string symName, string opCode, string ope
         }
         if (addressingMode(objCode).substr(0, 9) == "Immediate") {
             immediateValue = 1;
+        }
+
+        int lastChar = addressingMode(objCode).length() - 1;
+        if (addressingMode(objCode).substr(lastChar, 1) == "I") {
+            operand = operand  + ",X";
         }
 
         if (extValue == 1)

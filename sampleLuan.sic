@@ -1,12 +1,16 @@
 SUM      START   0
-         LDX    #000               This is a comment.               
-LOOP     LDA     003               This is a comment.               
+FIRST    LDX    #000               This is a comment.               
+         LDA     =X'3F'            This is a comment.               
          J       910               This is a comment.               
         +STL     11BA0             This is a comment.               
-LOOP2   +STX     BC000             This is a comment.               
+        +STX     BC000             This is a comment.               
          TIX     00A               This is a comment.               
-WAIT     JLT     FF4               This is a comment.               
-        +STA     02F01             This is a comment.               
+         JLT     FF4               This is a comment.               
+        +STA     TOTAL             This is a comment.               
          LDB    #000               This is a comment.               
-         BASE                 
+         BASE    000
+COUNT    RESW    1                 This is a comment.               
+TABLE    RESW    2000              This is a comment.               
+TABLE2   RESW    2000              This is a comment.               
+TOTAL    RESW    1                 This is a comment.               
          END     000000
