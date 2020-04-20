@@ -60,9 +60,6 @@ flags extractFlags(string instr) {
     xbpe.p = (nibble & 2) ? 1 : 0;
     xbpe.e = (nibble & 1) ? 1 : 0;
 
-    //debug seeing what flags should be
-    //cout <<"Flags for " << instr << ": "<< xbpe.x << xbpe.b<< xbpe.p<< xbpe.e << endl;
-
     return xbpe;
 }
 
@@ -614,9 +611,6 @@ int main(int argc, char *argv[]) {
             lisOutput << lisTitleLine << endl;
             continue;
         }
-
-        //if (record.at(0) == 'H') {
-        //}
 
         if (record.at(0) == 'T') {
 
