@@ -1,11 +1,13 @@
 Symbol  Value   Flags:
 -----------------------
 FIRST   000000  R
-LOOP    00000B  R
-COUNT   00001E  R
-TABLE   000021  R
-TABLE2  001791  R
-TOTAL   002F01  R
+STORE   000009  R
+LOOP    000011  R
+CHECK   000014  R
+COUNT   000020  R
+TABLE   000023  R
+TABLE2  001793  R
+TOTAL   002F03  R
 
 Name    Literal  Length Address:
 ------------------------------
