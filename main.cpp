@@ -768,7 +768,14 @@ int main(int argc, char *argv[]) {
                 }
             }
 
-
+            //Dante's code that places the literals at their respective locations
+            vector<string> litVector = literalsWithLoc(symFileName);
+            for (int i = 0; i < litVector.size(); i++) { //for every literal, traverse the addresses until a match is found
+                for (int j = 0; j < addresses.size(); j++) {
+                    if (litVector[i].substr(0, 4) == addresses[j]) //if matching addresses, replace the operand value at that address with literal
+                        operands[j] = litVector[i].substr(4); //corresponding addresses for operands should be at same index in arrays
+                }
+            }
 
             //TODO
             // need to include literal detection and replacement as well,
