@@ -201,8 +201,6 @@ string Opcode::getOpcode(string opcodes) {
     translated_opcode = strcat((char *)firstHex.c_str(),(char *)translatedSecondHex.c_str()); // combime both opcode digits after conversion
 
     return translated_opcode;
-   
-    // return opcodes;
 };
 
 // Return index of the opcode if it is in the opcode_table. -1 if its not
