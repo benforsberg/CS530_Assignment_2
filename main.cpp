@@ -485,10 +485,10 @@ vector<string> literalsWithLoc(string fileName) {
     symtab.close();
 
     //printing out the loc addresses for testing purposes
-    std::cout << "The contents of string vector that literalsWithLoc function returns is :" << endl;
-    for (std::vector<string>::iterator it = answer.begin(); it != answer.end(); ++it)
-        std::cout << *it << endl;
-    std::cout << '\n';
+    //std::cout << "The contents of string vector that literalsWithLoc function returns is :" << endl;
+    //for (std::vector<string>::iterator it = answer.begin(); it != answer.end(); ++it)
+        //std::cout << *it << endl;
+    //std::cout << '\n';
 
   return answer;
 }
@@ -771,7 +771,7 @@ int main(int argc, char *argv[]) {
             ///Marina marina analyse displacements and fill the labels in if possible
             int sizeOp = sizeof(operands)/sizeof(*operands);
             for (int i =0; i< sizeOp; i++ ) { 
-                cout << "here is opperands " + operands[i] + "\n";
+                //cout << "here is opperands " + operands[i] + "\n";
 
             vector<string> labelsM = labelsWithLoc(symFileName);
             for (vector<string>::iterator it = labelsM.begin(); it != labelsM.end(); ++it) {
@@ -789,7 +789,7 @@ int main(int argc, char *argv[]) {
             //Dante's code that places the literals at their respective locations
             vector<string> litVector = literalsWithLoc(symFileName);
             for (int i = 0; i < litVector.size(); i++) { //for every literal, traverse the addresses until a match is found
-                for (int j = 0; j < addresses.size(); j++) {
+                for (int j = 0; j < addresses->size(); j++) {
                     if (litVector[i].substr(0, 4) == addresses[j]) //if matching addresses, replace the operand value at that address with literal
                         operands[j] = litVector[i].substr(4); //corresponding addresses for operands should be at same index in arrays
                 }
@@ -946,7 +946,6 @@ int main(int argc, char *argv[]) {
                     }
                 }
                 else{
-                   //cout << labelAddressArr[arrCtr] << " is: "<<instrSizeInt << " byte(s)." <<endl;
                     reservedInstructions[i] = "RESB";
                     nextInstLoc = 1;
 
@@ -954,34 +953,23 @@ int main(int argc, char *argv[]) {
                         int num = Opcode::hexToInt(labelAddressArr[i]);
                         nextInstLoc = nextInstLoc + num;
                         startingAddress = int_to_hex(nextInstLoc);
-                       // cout << "startingAddress " << startingAddress << endl;
                     }
                 }
                 rearAddr = arrayVal;
-                //cout << "Made it to line 950" << endl;
-
 
                 //stops from trying to go out of bounds
                 if(arrCtr <= labelArr->size()) {
                     arrCtr++;
-                   // cout << "Made it to line 956" << endl;
                     if(arrCtr < labelArr->size()) {
                         arrayVal = labelAddressArr[arrCtr];
                         rearAddrInt = Opcode::hexToInt(rearAddr);
                         arrayValInt = Opcode::hexToInt(arrayVal);
                     }
                     if (arrCtr == labelArr->size()) {
-                        //rearAddrInt = Opcode::hexToInt(rearAddr);
-                        //arrayValInt = Opcode::hexToInt(arrayVal);
+
                     }
                 }
             }
-            //TODO
-            // need to add stuff inside there into array
-            // need to check mem allocations for leak
-            // reverse array again for easy printing
-            // then make a print method and call from here
-            //cout << "Made it to line 964" << endl;
 
             string tempAddr[labelSize];
             string templabel[labelSize];
@@ -1005,7 +993,6 @@ int main(int argc, char *argv[]) {
             }
 
             //need to only use arr elements starting at this point since priors have already been printed.
-            //cout << "finalAddress: " << finalAddress << endl;
             int resStartAddr;
             int sizeToPrint;
             for (int i = 0; i < labelSize; i++) {
@@ -1013,10 +1000,7 @@ int main(int argc, char *argv[]) {
                 resStartAddr = i;
             }
 
-           // cout << "Made it to line 996" << endl;
 
-            //TODO
-            // need to redo to_string function since c++98 doesn't support it
             for (int i = resStartAddr; i < labelSize; i++){
 
                 //This statement generates a string with SIC format
@@ -1058,8 +1042,8 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    cout << "TODO:" << endl;
-    cout << "Literals, label replacement, and SDD" << endl;
+    //cout << "TODO:" << endl;
+    //cout << "Literals, label replacement, and SDD" << endl;
 
 
     cout << sicFileName << " created successfully!"<< endl;
