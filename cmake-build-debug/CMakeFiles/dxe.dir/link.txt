@@ -1,3 +1,0 @@
-C:\Users\benjf\AppData\Local\JetBrains\Toolbox\apps\CLion\ch-0\193.6911.21\bin\cmake\win\bin\cmake.exe -E remove -f CMakeFiles\dxe.dir/objects.a
-C:\MinGW\bin\ar.exe cr CMakeFiles\dxe.dir/objects.a @CMakeFiles\dxe.dir\objects1.rsp
-C:\MinGW\bin\g++.exe -g   -Wl,--whole-archive CMakeFiles\dxe.dir/objects.a -Wl,--no-whole-archive  -o dxe.exe -Wl,--out-implib,libdxe.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\dxe.dir\linklibs.rsp
