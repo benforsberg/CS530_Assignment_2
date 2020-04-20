@@ -793,7 +793,7 @@ int main(int argc, char *argv[]) {
                     if (operands[i].length() == 3) {
                         string hex3 = operands[i].substr(0,3); //this will be hex represenation of operand
                         int hexOperandToInt = Opcode::hexToInt(hex3); //this trnslates hex string to int
-                        operands[i] = to_string(hexOperandToInt); 
+                        operands[i] = NumberToString(hexOperandToInt);
                         
                     }
 
