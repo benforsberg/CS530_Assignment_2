@@ -1,6 +1,7 @@
 0000    SUM      START    0
 0000    FIRST    LDX     #0                        050000  
-0003             LDA      =X'3F'                   032003  
+0003             LDA     =X'3F'                    032003  
+0003             LTORG    
 0006             J        2320                     3F6910  
 0009            +STL      11BA0,X                  17911BA0
 000D            +STX      BC000                    131BC000
@@ -12,4 +13,4 @@
 0021    TABLE    RESW     2000                             
 1791    TABLE2   RESW     2000                             
 2F01    TOTAL    RESW     1                                
-                 END      000000
+                 END      FIRST 

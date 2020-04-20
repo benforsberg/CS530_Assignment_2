@@ -330,6 +330,12 @@ string printToSICFile(string sicLabel, string opCode, string sicOperand, string 
             operandSymbol = "@";
         if (immediateValue == 1)
             operandSymbol = "#";
+
+        
+        if (sicOperand.substr(0, 1) == "=") {
+            sicOperand = sicOperand.substr(1, 5);
+            operandSymbol = "=";
+        }
     }
 
     //op code col 10-15
@@ -412,6 +418,11 @@ string printToLISFile(string lineAddr, string symName, string opCode, string ope
             operandSymbol = "@";
         if (immediateValue == 1)
             operandSymbol = "#";
+
+        if (operand.substr(0, 1) == "=") {
+            operand = operand.substr(1, 5);
+            operandSymbol = "=";
+        }
 
     }
     //opcode col 18-23

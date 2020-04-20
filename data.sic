@@ -1,1 +1,17 @@
-Testing SIC file outputLABEL   +ADD    @LISTA             This is a comment                
+SUM      START   0
+FIRST    LDX    #0                                                   
+         LDA    =X'3F'                                               
+         LTORG   
+         J       2320                                                
+STORE   +STL     TABLE2,X                                            
+        +STX     COUNT                                               
+LOOP     TIX     10                                                  
+CHECK   +JLT     LOOP                                                
+        +STA     TOTAL                                               
+        +LDB    #TABLE                                               
+         BASE    TABLE 
+COUNT    RESW    1                                                   
+TABLE    RESW    2000                                                
+TABLE2   RESW    2000                                                
+TOTAL    RESW    1                                                   
+         END     FIRST 
