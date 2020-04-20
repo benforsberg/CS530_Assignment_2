@@ -180,28 +180,28 @@ vector<string> addressesLoc(string startAddr, instructionList instructions) {
     addrLoc.push_back(startAddr.substr(2, 6)); //loads first address 
 
     for (int i = 0; i<10; i++) {
-    if (form[i] != "none") {
-        if (form[i] == "1"){
-            intAddr += 1;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
+        if (form[i] != "none") {
+            if (form[i] == "1"){
+                intAddr += 1;
+                string newAddr = int_to_hex(intAddr);
+                addrLoc.push_back(newAddr);
+            }
+            else if (form[i] == "2"){
+                intAddr += 2;
+                string newAddr = int_to_hex(intAddr);
+                addrLoc.push_back(newAddr);
+            }
+            else if (form[i] == "3"){
+                intAddr += 3;
+                string newAddr = int_to_hex(intAddr);
+                addrLoc.push_back(newAddr);
+            }
+            else if (form[i] == "4"){
+                intAddr += 4;
+                string newAddr = int_to_hex(intAddr);
+                addrLoc.push_back(newAddr);
+            }
         }
-        else if (form[i] == "2"){
-            intAddr += 2;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-        else if (form[i] == "3"){
-            intAddr += 3;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-        else if (form[i] == "4"){
-            intAddr += 4;
-            string newAddr = int_to_hex(intAddr);
-            addrLoc.push_back(newAddr);
-        }
-    }
     }
     
     /*//printing out the loc addresses for testing purposes
@@ -291,37 +291,40 @@ string addressingMode(string instr) {
 }
 
 
-string printToSICFile(string sicLabel, string opCode, string sicOperand, string comment,string objCode){
+string printToSICFile(string sicLabel, string opCode, string sicOperand, string comment,string objCode, bool hasOpcodes){
     //label col 1-6
     string label = sicLabel;
     //col 7-8
     string spaceChars1 = "  ";
     //col 9
     string isExtended = " ";
-    flags flag = extractFlags(objCode);
-    int extValue = flag.e;
-    int indirectValue = 0;
-    int immediateValue = 0;
-
-    //debug
-    //cout << "\nAddressing type: " <<addressingMode(objCode) << endl;
-
-    //checks if start of string returned by addressingMode() has immediate or indirect in it to apply special character
-    if (addressingMode(objCode).substr(0,9) =="iNdirect"){
-        indirectValue = 1;
-    }
-    if (addressingMode(objCode).substr(0,9) =="Immediate"){
-        immediateValue = 1;
-    }
-
-    if (extValue == 1)
-        isExtended = "+";
-    //default is space, gets set as other if found
     string operandSymbol = " ";
-    if (indirectValue == 1)
-        operandSymbol = "@";
-    if (immediateValue == 1)
-        operandSymbol = "#";
+
+    //Stops this from being called when RESB/W is being printed
+    if (hasOpcodes) {
+        flags flag = extractFlags(objCode);
+        int extValue = flag.e;
+        int indirectValue = 0;
+        int immediateValue = 0;
+
+
+        //checks if start of string returned by addressingMode() has immediate or indirect in it to apply special character
+        if (addressingMode(objCode).substr(0, 9) == "iNdirect") {
+            indirectValue = 1;
+        }
+        if (addressingMode(objCode).substr(0, 9) == "Immediate") {
+            immediateValue = 1;
+        }
+
+        if (extValue == 1)
+            isExtended = "+";
+        //default is space, gets set as other if found
+
+        if (indirectValue == 1)
+            operandSymbol = "@";
+        if (immediateValue == 1)
+            operandSymbol = "#";
+    }
 
     //op code col 10-15
     string opCodeString = opCode;
@@ -356,14 +359,11 @@ string printToSICFile(string sicLabel, string opCode, string sicOperand, string 
 
     //full SIC output line to be written to file
     string sicOutString = label + spaceChars1 + isExtended + opCodeString + space + operandSymbol + operand + comments;
-
-    //Debug
-    //cout << sicOutString << endl;
     return sicOutString;
 
 }
 //need to account for special char columns!
-string printToLISFile(string lineAddr, string symName, string opCode, string operand, string objCode){
+string printToLISFile(string lineAddr, string symName, string opCode, string operand, string objCode, bool hasOpcodes){
     //writing output for LIS file
 
     //label col 1-4
@@ -377,29 +377,31 @@ string printToLISFile(string lineAddr, string symName, string opCode, string ope
 
     //col 17 special + symbol
     string isExtended = " ";
-    flags flag = extractFlags(objCode);
-    int extValue = flag.e;
-    int indirectValue = 0;
-    int immediateValue = 0;
-
-    //debug
-    //cout << "\nAddressing type: " <<addressingMode(objCode) << endl;
-
-    if (addressingMode(objCode).substr(0,8) =="iNdirect"){
-        indirectValue = 1;
-    }
-    if (addressingMode(objCode).substr(0,9) =="Immediate"){
-        immediateValue = 1;
-    }
-
-    if (extValue == 1)
-        isExtended = "+";
     string operandSymbol = " ";
-    if (indirectValue == 1)
-        operandSymbol = "@";
-    if (immediateValue == 1)
-        operandSymbol = "#";
 
+    //Stops this from being called when RESB/W is being printed
+    if (hasOpcodes) {
+        flags flag = extractFlags(objCode);
+        int extValue = flag.e;
+        int indirectValue = 0;
+        int immediateValue = 0;
+
+        if (addressingMode(objCode).substr(0, 8) == "iNdirect") {
+            indirectValue = 1;
+        }
+        if (addressingMode(objCode).substr(0, 9) == "Immediate") {
+            immediateValue = 1;
+        }
+
+        if (extValue == 1)
+            isExtended = "+";
+
+        if (indirectValue == 1)
+            operandSymbol = "@";
+        if (immediateValue == 1)
+            operandSymbol = "#";
+
+    }
     //opcode col 18-23
     string opcodeLis = opCode;
     //col 24-25 blank
@@ -438,7 +440,6 @@ string printToLISFile(string lineAddr, string symName, string opCode, string ope
 
     //full LIS output line to be written to file //+ isExtended
     string lisOutString = location + blank + symbolNameLis + doublespace + isExtended + opcodeLis + doublespace + operandSymbol +  operandLis + doublespace + instructionLis;
-    //cout << "LIS Outstring" << lisOutString << endl;
     return lisOutString;
 }
 
@@ -492,6 +493,19 @@ vector<string> literalsWithLoc(string fileName) {
   return answer;
 }
 
+
+
+
+
+
+
+
+string NumberToString ( int num )
+{
+    ostringstream ss;
+    ss << num;
+    return ss.str();
+}
 
 int main(int argc, char *argv[]) {
 
@@ -583,7 +597,7 @@ int main(int argc, char *argv[]) {
         if (count == 0) {
             programName = record;
             programName = programName.substr(1);
-            cout << "\nProgram Name is: " << programName << endl;
+            //cout << "\nProgram Name is: " << programName << endl;
         }
 
         count++;
@@ -592,12 +606,12 @@ int main(int argc, char *argv[]) {
             strtAdrsAndLngth = record;
             startingAddress = strtAdrsAndLngth.substr(0, 6);
 
-            cout << "Starting address: " << startingAddress << endl;
+            //cout << "Starting address: " << startingAddress << endl;
             programLength = strtAdrsAndLngth.substr(6, 6);
             string zeroAddr = startingAddress;
             actualstartAddress= startingAddress;
 
-            cout << "Program length: " << programLength << endl;
+            //cout << "Program length: " << programLength << endl;
 
             //makes title lines for SIC and LIS files
             string sicTitleLine;
@@ -691,8 +705,8 @@ int main(int argc, char *argv[]) {
 
             //hardcoded for now, these all must be gone before we're finished
             //string labels[];
-            string operands[] = {"LISTA", "LISTB", "LISTC", "MAXLEN", "MIN", "TOTAL", "LISTA-LISTB",
-                                 "LISTB-LISTC+LISTA", "FIRST", "STORE"};
+            string operands[numInstructionsInRecord];//= {"LISTA", "LISTB", "LISTC", "MAXLEN", "MIN", "TOTAL", "LISTA-LISTB",
+                                // "LISTB-LISTC+LISTA", "FIRST", "STORE"};
 
             string instructions [numInstructionsInRecord];
 
@@ -721,18 +735,22 @@ int main(int argc, char *argv[]) {
             for (int i = 0; i < addressesLIS.size(); i++) {
                 buffer = addressesLIS[i];
 
+                //fixes issue where first address in each record would be only 2 digits
+                if (buffer.size() != 4){
+                    string fix = startingAddress;
+                    fix  = fix.substr(0,2);
+
+                    buffer = fix + buffer;
+                }
+
                 std::locale loc;
                 for (std::string::size_type j=0; j < buffer.length(); ++j) {
                     buffer[j] = toupper(buffer[j], loc);
                 }
 
-                //fixes issue where first address in each record would be only 2 digits
-                if (buffer.size() != 4){
-                    buffer = "00" + buffer;
-                }
-
                 addresses[i] = buffer;
 
+                //controls resb start
                 if (i == (addressesLIS.size() - 1)) {
                     finalAddress = buffer;
                 }
@@ -831,15 +849,15 @@ int main(int argc, char *argv[]) {
 
                 //This statement generates a string with SIC format
                 string sicOutString = printToSICFile(labels[i], instructions[i], operands[i], "This is a comment.",
-                                                     objList[i]);
+                                                     objList[i],true);
 
                 //This statement generates a string with LIS format
-                string lisOutString = printToLISFile(addresses[i], labels[i], instructions[i], operands[i], objList[i]);
+                string lisOutString = printToLISFile(addresses[i], labels[i], instructions[i], operands[i], objList[i],true);
 
 
                 //Statements below show SIC and LIS output in console (Having both on at once not recommended for readability's sake)
                 //cout << sicOutString << endl;
-                cout << lisOutString << endl;
+                //cout << lisOutString << endl;
 
                 //Writes both strings to their respective files
                 sicOutput << sicOutString << endl;
@@ -855,7 +873,7 @@ int main(int argc, char *argv[]) {
                     lisOutput << lisbasestring << endl;
 
                     //debug
-                    cout << lisbasestring << endl;
+                    //cout << lisbasestring << endl;
                 }
             }
 
@@ -883,6 +901,7 @@ int main(int argc, char *argv[]) {
 
             int instrSizeInt;
             string instrSize;
+            int labelSize = labelArr->size();
 
             //string secondToLast = labelAddressArr[arrlen];
             //stores current end of program to help with calculating resb/resw
@@ -897,28 +916,64 @@ int main(int argc, char *argv[]) {
             int arrCtr = 0;
             string arrayVal= labelAddressArr[0];
 
+            //this will be operand for new print method
+            int instrSizeIntArr[labelSize];
+            //this will be instruction name for new print method
+            string reservedInstructions[labelSize];
+
+            int nextInstLoc;
 
             //TODO I need to call print method from in this loop for this
             for (int i = 0; i < labelArr->size(); i++){
                 //instrSizeInt will be operand, will need to determine if bytes/words
                 instrSizeInt = rearAddrInt - arrayValInt;
                 instrSize = int_to_hex(instrSizeInt);
+                instrSizeIntArr[i] = instrSizeInt;
                 //cout << "Size of RES label in decimal " << labelAddressArr[arrCtr] << " is: "<<instrSizeInt << " bytes/words." <<endl;
                 //cout << "Size of RES label in hex " << labelAddressArr[arrCtr] << " is: "<<instrSize << " bytes/words." <<endl;
                 if (instrSizeInt % 3 == 0){
-                    cout <<  labelAddressArr[arrCtr] << " is: "<<instrSizeInt / 3 << " word(s)." <<endl;
+                    reservedInstructions[i] = "RESW";
+                    instrSizeIntArr[i] = instrSizeIntArr[i] / 3;
+                    nextInstLoc = 3;
+
+                    if (i == 0) {
+                        int num = Opcode::hexToInt(labelAddressArr[i]);
+                        nextInstLoc = nextInstLoc + num;
+                        startingAddress = int_to_hex(nextInstLoc);
+
+                        //cout <<  "nextInstLoc "<<nextInstLoc <<endl;
+                        //cout << "startingAddress " << startingAddress << endl;
+                    }
                 }
                 else{
-                    cout << labelAddressArr[arrCtr] << " is: "<<instrSizeInt << " byte(s)." <<endl;
+                   //cout << labelAddressArr[arrCtr] << " is: "<<instrSizeInt << " byte(s)." <<endl;
+                    reservedInstructions[i] = "RESB";
+                    nextInstLoc = 1;
+
+                    if(i == 0) {
+                        int num = Opcode::hexToInt(labelAddressArr[i]);
+                        nextInstLoc = nextInstLoc + num;
+                        startingAddress = int_to_hex(nextInstLoc);
+                       // cout << "startingAddress " << startingAddress << endl;
+                    }
                 }
                 rearAddr = arrayVal;
+                //cout << "Made it to line 950" << endl;
+
 
                 //stops from trying to go out of bounds
-                if(arrCtr <= i) {
+                if(arrCtr <= labelArr->size()) {
                     arrCtr++;
-                    arrayVal = labelAddressArr[arrCtr];
-                    rearAddrInt = Opcode::hexToInt(rearAddr);
-                    arrayValInt = Opcode::hexToInt(arrayVal);
+                   // cout << "Made it to line 956" << endl;
+                    if(arrCtr < labelArr->size()) {
+                        arrayVal = labelAddressArr[arrCtr];
+                        rearAddrInt = Opcode::hexToInt(rearAddr);
+                        arrayValInt = Opcode::hexToInt(arrayVal);
+                    }
+                    if (arrCtr == labelArr->size()) {
+                        //rearAddrInt = Opcode::hexToInt(rearAddr);
+                        //arrayValInt = Opcode::hexToInt(arrayVal);
+                    }
                 }
             }
             //TODO
@@ -926,42 +981,66 @@ int main(int argc, char *argv[]) {
             // need to check mem allocations for leak
             // reverse array again for easy printing
             // then make a print method and call from here
+            //cout << "Made it to line 964" << endl;
 
-            int labelSize = labelArr->size();
             string tempAddr[labelSize];
             string templabel[labelSize];
+            string tempreservedInstructions[labelSize];
+            int tempinstrSizeIntArr[labelSize];
+
             int j= labelSize;
 
             for (int i = 0; i < labelSize; i++){
                 tempAddr[i] = labelAddressArr[j - 1];
                 templabel[i] = labelArr[j - 1];
+                tempreservedInstructions[i] = reservedInstructions[j - 1];
+                tempinstrSizeIntArr[i] = instrSizeIntArr[j - 1];
                 j--;
             }
             for (int i = 0; i < labelSize; i++) {
                 labelAddressArr[i] = tempAddr[i];
                 labelArr[i] = templabel[i];
-                cout << "Reversed Array Addresses: " << labelAddressArr[i] <<endl;
-                cout << "Reversed Array Labels: " << labelArr[i] <<endl;
+                reservedInstructions[i] = tempreservedInstructions[i];
+                instrSizeIntArr[i] = tempinstrSizeIntArr[i];
             }
 
             //need to only use arr elements starting at this point since priors have already been printed.
-            cout << "finalAddress: " << finalAddress << endl;
+            //cout << "finalAddress: " << finalAddress << endl;
             int resStartAddr;
             int sizeToPrint;
             for (int i = 0; i < labelSize; i++) {
             if (labelAddressArr[i] == finalAddress)
                 resStartAddr = i;
             }
-            sizeToPrint = labelSize - resStartAddr;
-            cout << "# res lines to print " << sizeToPrint<< endl;
 
-            
+           // cout << "Made it to line 996" << endl;
+
+            //TODO
+            // need to redo to_string function since c++98 doesn't support it
+            for (int i = resStartAddr; i < labelSize; i++){
+
+                //This statement generates a string with SIC format
+                string sicOutString = printToSICFile(labelArr[i], reservedInstructions[i], NumberToString(instrSizeIntArr[i]), "This is a comment.","",false);
+
+                //This statement generates a string with LIS format
+                string lisOutString = printToLISFile(labelAddressArr[i], labelArr[i], reservedInstructions[i], NumberToString(instrSizeIntArr[i]), "",false);
+
+                //cout << labelAddressArr[i] + labelArr[i]
+                //cout << sicOutString << endl;
+
+                //cout << lisOutString << endl;
+
+                sicOutput << sicOutString << endl;
+                lisOutput << lisOutString << endl;
 
 
-            cout << "Completed RESB/RESW loop!" << endl;
+                /*startingAddress = labelAddressArr[i];
+                int addr = Opcode::hexToInt(startingAddress);
+                addr = addr + nextInstLoc;
+                startingAddress = int_to_hex(addr);*/
 
-
-            //cout << "Size of arrays: " <<(sizeof(labelAddressArr) + sizeof(labelArr) + sizeof(objList) + sizeof(operands) + sizeof(labels) + sizeof(addresses) + sizeof(instructions)) / 1024 << " MB" <<endl;
+            }
+        //cout <<"Starting address of next record: " << startingAddress << endl;
         }
 
         //Can access the mod record in this loop
@@ -973,18 +1052,18 @@ int main(int argc, char *argv[]) {
         //Can access the end record in this loop
         if (record.at(0) == 'E') {
             //cout << "Found an end record" << endl;
-            cout << "                 END      " + actualstartAddress << endl;
+            //cout << "                 END      " + actualstartAddress << endl;
             sicOutput << "         END     " + actualstartAddress<< endl;
             lisOutput << "                 END      " + actualstartAddress<< endl;
         }
     }
 
-    cout << "\n\nTODO:\n" << endl;
-    cout << "- Need to read symtable,do literal detection and replacement, including adding lines using correct EQU and LTORG instructions." << endl;
-    cout << "- Would need to check if each operand contains a literal before calling print statements." << endl;
+    cout << "TODO:" << endl;
+    cout << "Literals, label replacement, and SDD" << endl;
 
 
-
+    cout << sicFileName << " created successfully!"<< endl;
+    cout << lisFileName << " created successfully!" << endl;
 
     //closes all filestreams
     objInput.close();
