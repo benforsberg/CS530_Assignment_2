@@ -846,7 +846,7 @@ int main(int argc, char *argv[]) {
 
 
                 //This statement generates a string with SIC format
-                string sicOutString = printToSICFile(labels[i], instructions[i], operands[i], "This is a comment.",
+                string sicOutString = printToSICFile(labels[i], instructions[i], operands[i], "",
                                                      objList[i],true);
 
                 //This statement generates a string with LIS format
@@ -1002,7 +1002,7 @@ int main(int argc, char *argv[]) {
             for (int i = resStartAddr; i < labelSize; i++){
 
                 //This statement generates a string with SIC format
-                string sicOutString = printToSICFile(labelArr[i], reservedInstructions[i], NumberToString(instrSizeIntArr[i]), "This is a comment.","",false);
+                string sicOutString = printToSICFile(labelArr[i], reservedInstructions[i], NumberToString(instrSizeIntArr[i]), "","",false);
 
                 //This statement generates a string with LIS format
                 string lisOutString = printToLISFile(labelAddressArr[i], labelArr[i], reservedInstructions[i], NumberToString(instrSizeIntArr[i]), "",false);
