@@ -703,11 +703,7 @@ int main(int argc, char *argv[]) {
             if (instrList.s9 != "none")
                 objList[9] = instrList.s9;
 
-            //hardcoded for now, these all must be gone before we're finished
-            //string labels[];
-            string operands[numInstructionsInRecord];//= {"LISTA", "LISTB", "LISTC", "MAXLEN", "MIN", "TOTAL", "LISTA-LISTB",
-                                // "LISTB-LISTC+LISTA", "FIRST", "STORE"};
-
+            string operands[numInstructionsInRecord];
             string instructions [numInstructionsInRecord];
 
 
@@ -763,14 +759,11 @@ int main(int argc, char *argv[]) {
             for (int i = 0; i < numInstructionsInRecord; i++) {
                 //gets displacement field
                 operands[i] = extractDisplacement(objList[i]);
-                //retrieves decimal form of operand to display
-                //int num = Opcode::hexToInt(operands[i]);
-                //cout <<"Hex to int for: " << operands[i] << " is " << to_string(num) <<endl;
-                //operands[i] = to_string(num);
+
             }
             ///Marina marina analyse displacements and fill the labels in if possible
             int sizeOp = sizeof(operands)/sizeof(*operands);
-            for (int i =0; i< sizeOp; i++ ) { 
+            for (int i =0; i< sizeOp; i++ ) {
                 //cout << "here is opperands " + operands[i] + "\n";
 
             vector<string> labelsM = labelsWithLoc(symFileName);
@@ -829,6 +822,11 @@ int main(int argc, char *argv[]) {
             //if an address for an instruction already generated matches one found in sym file
             // then set the label for that instruction to it;
             for (int i = 0; i < numInstructionsInRecord; i++) {
+                //retrieves decimal form of operand to display
+                //int num = Opcode::hexToInt(operands[i]);
+                //cout <<"Hex to int for: " << operands[i] << " is " << to_string(num) <<endl;
+                //operands[i] = to_string(num);
+
                 for (int j = 0; j < labelVector.size(); j++) {
                     if (addresses[i] == labelAddressArr[j]) {
                         //cout << "A correct spot for a label has been found" << endl;
@@ -866,8 +864,8 @@ int main(int argc, char *argv[]) {
 
                 //This prints the BASE line after a LDB instruction is found
                 if (Opcode::getOpcode(objList[i]) == "68") {
-                    string basestring = "         BASE                 ";
-                    string lisbasestring = addresses[i] + "             BASE";
+                    string basestring = "         BASE    " + operands[i];
+                    string lisbasestring = addresses[i] + "             BASE     " + operands[i];;
 
                     sicOutput << basestring << endl;
                     lisOutput << lisbasestring << endl;
