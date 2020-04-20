@@ -894,6 +894,16 @@ int main(int argc, char *argv[]) {
                     //debug
                     //cout << lisbasestring << endl;
                 }
+
+                for (int x = 0; x < litVector.size(); x++) {
+                    if (addresses[i] == litVector[x].substr(0, 4)) {
+                        string sicltOrgstring = "         LTORG   ";
+                        string lisltOrgstring = addresses[i] + "             LTORG    ";
+
+                        sicOutput << sicltOrgstring << endl;
+                        lisOutput << lisltOrgstring << endl;
+                    }
+                }
             }
 
             //saves last address to know where to start for next text record
