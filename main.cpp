@@ -331,7 +331,7 @@ string printToSICFile(string sicLabel, string opCode, string sicOperand, string 
         if (immediateValue == 1)
             operandSymbol = "#";
 
-        
+        //this will move "=" sign to the left of literal operand for the correct formating 
         if (sicOperand.substr(0, 1) == "=") {
             sicOperand = sicOperand.substr(1, 5);
             operandSymbol = "=";
@@ -419,7 +419,8 @@ string printToLISFile(string lineAddr, string symName, string opCode, string ope
         if (immediateValue == 1)
             operandSymbol = "#";
 
-        if (operand.substr(0, 1) == "=") {
+        //this will move "=" sign to the left of literal operand for the correct formating 
+        if (operand.substr(0, 1) == "=") { 
             operand = operand.substr(1, 5);
             operandSymbol = "=";
         }
