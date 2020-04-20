@@ -1,3 +1,12 @@
+#Names: Marina Pestriacheva, Ben Forsberg, Dante Colombo-Sadeghi
+#Account usernames: 
+#    Marina Pestriacheva, cssc1907 
+#    Ben Forsberg, cssc1930
+#   Dante Colombo-Sadeghi, cssc1911
+#Class information: CS 530, Spring 2020
+#Assignment #2, DXE Disassembler for XE computer
+#Filename of this file: makefile
+
 CC = g++
 CFLAGS = -c
 

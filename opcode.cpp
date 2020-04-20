@@ -1,11 +1,13 @@
 /*
 Names: Marina Pestriacheva, Ben Forsberg, Dante Colombo-Sadeghi
-Account usernames: Marina - cssc1907, Ben - cssc1930, Dante - cssc1911
+Account usernames: 
+    Marina Pestriacheva, cssc1907 
+    Ben Forsberg, cssc1930
+    Dante Colombo-Sadeghi, cssc1911
 Class information: CS 530, Spring 2020
 Assignment #2, DXE Disassembler for XE computer
-Filename of this file: README
+Filename of this file: Opcode.cpp
 */
-
 #include <string.h>
 #include <stdio.h>
 #include <iostream>
@@ -20,24 +22,6 @@ struct opcodes{
     std::string hex;
     std::string name;
     std::string formats;
-};
-
-/*structure to store registers*/
-struct registers{
-    std::string letter;
-    std::string number;
-};
-
-const struct registers registers_map[] = {
-    { "A", "0" },
-    { "X", "1" },
-    { "L", "2" },
-    { "B", "3" },
-    { "S", "4" },
-    { "T", "5" },
-    { "F", "6" },
-    { "PC", "8" },
-    { "SW", "9" }
 };
 
 const struct opcodes opcode_table[] = {
@@ -116,7 +100,7 @@ int Opcode::hexToInt(string hexValue){
     return num;
 };
 
-// Take in 1 int and return Binary number as a string.
+// Takes in 1 int and return Binary number as a string.
 string hexToStringBin(unsigned long value) {
     if(value == 0)
         return "0000";
@@ -192,9 +176,8 @@ string binToHex(string value){
     exit(EXIT_FAILURE);
 };
 
-
 // Take the first 2 hex digits of the instruction as string
-// Return the true opcode from opcode table as string.
+// Returns the true opcode from opcode table as string.
 string Opcode::getOpcode(string opcodes) {
     int    secondInt;
     string first2Bin;
