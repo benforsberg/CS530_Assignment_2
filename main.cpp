@@ -246,7 +246,7 @@ string addressingMode(string instr) {
         if (f.e == 1) { //FORMAT == 4; Always Direct Addressing (Never Base- nor PC-relative)
             if (difference == 3) //Simple Addressing
                 if (f.x == 1) //Indexing
-                    mode = "Simple & Direct Addressing (Indexing).I";
+                    mode = "Simple & Direct Addressing (Indexing).I"; //I at the end to detect Indexing better
                 else //No Indexing
                     mode = "Simple & Direct Addressing.";
             else if (difference == 2) //iNdirect Addressing
