@@ -1,13 +1,13 @@
 SUM      START   0
-FIRST    LDX    #000                                                 
+FIRST    LDX    #0                                                   
          LDA     =X'3F'                                              
-         J       910                                                 
+         J       2320                                                
         +STL     11BA0,X                                             
         +STX     BC000                                               
-         TIX     00A                                                 
-         JLT     FF4                                                 
+         TIX     10                                                  
+         JLT     4084                                                
         +STA     TOTAL                                               
-         RSUB    000                                                 
+         RSUB    0                                                   
 COUNT    RESW    1                                                   
 TABLE    RESW    2000                                                
 TABLE2   RESW    2000                                                
