@@ -508,10 +508,7 @@ vector<string> literalsWithLoc(string fileName) {
 
 
 
-
-
-
-
+//Our implementation of to_string since built in method isn't supported on edoras
 string NumberToString ( int num )
 {
     ostringstream ss;
@@ -597,6 +594,8 @@ int main(int argc, char *argv[]) {
 
 
 
+    int numInstructionsInRecord = 0;
+
 
     // extracts records from the file
     //meant to do all steps of disassembly each time a new record is found
@@ -664,10 +663,13 @@ int main(int argc, char *argv[]) {
             //Makes array of instructions returned from the struct
             instructionList instrList = parseInstructions(record);
 
-            int numInstructionsInRecord = 0;
+            //int numInstructionsInRecord = 0;
+            numInstructionsInRecord = 0;
 
             //control size of objList array: 2 parts, have counter of how many instructions present in record
             //part 1 if s# != "none" then increase counter
+
+            //cout << "numInstructionsInRecord " << numInstructionsInRecord <<endl;
 
             if (instrList.s0 != "none")
                 numInstructionsInRecord++;
@@ -809,27 +811,16 @@ int main(int argc, char *argv[]) {
                 }
             }
 
-            //TODO
-            // need to include literal detection and replacement as well,
-            // including adding lines using correct EQU and LTORG instructions.
-            // would need to check if each operand contains a literal before calling print statements and
-            // call helper function to do this.
-
-
             //this section manages label placement
             vector<string> labelVector = labelsWithLoc(symFileName);
-            //cout <<startingAddress << endl;
 
             string labels[numInstructionsInRecord];
-
             string labelAddressArr[labelVector.size()];
             string labelArr[labelVector.size()];
 
             //puts address of labels into array from sym file
             for (int i = 0; i < labelVector.size(); i++) {
-
                 labelAddressArr[i] = labelVector[i].substr(0, 4);
-                //cout << "labelAddressArr: " << labelAddressArr[i] << endl;
             }
             //puts labels into array from sym file
             for (int i = 0; i < labelVector.size(); i++) {
@@ -843,28 +834,20 @@ int main(int argc, char *argv[]) {
             //if an address for an instruction already generated matches one found in sym file
             // then set the label for that instruction to it;
             for (int i = 0; i < numInstructionsInRecord; i++) {
-                //retrieves decimal form of operand to display
-                //int num = Opcode::hexToInt(operands[i]);
-                //cout <<"Hex to int for: " << operands[i] << " is " << to_string(num) <<endl;
-                //operands[i] = to_string(num);
-
                 for (int j = 0; j < labelVector.size(); j++) {
                     if (addresses[i] == labelAddressArr[j]) {
-                        //cout << "A correct spot for a label has been found" << endl;
                         labels[i] = labelArr[j];
                         labelptr++;
-                        //cout << "Have done " << labelptr << " label(s)" << endl;
                     }
                 }
             }
 
 
 
+
+
             //Does this as many times are there are instructions in each record
-            cout << endl;
             for (int i = 0; i < numInstructionsInRecord; i++) {
-
-
 
                 //This statement generates a string with SIC format
                 string sicOutString = printToSICFile(labels[i], instructions[i], operands[i], "",
@@ -1066,6 +1049,34 @@ int main(int argc, char *argv[]) {
         if (record.at(0) == 'E') {
             //cout << "Found an end record" << endl;
             //cout << "                 END      " + actualstartAddress << endl;
+
+            string endAddress;
+
+            //this section manages label placement
+            vector<string> labelVector = labelsWithLoc(symFileName);
+
+            string labels[numInstructionsInRecord];
+            string labelAddressArr[labelVector.size()];
+            string labelArr[labelVector.size()];
+
+            //puts address of labels into array from sym file
+            for (int i = 0; i < labelVector.size(); i++) {
+                labelAddressArr[i] = labelVector[i].substr(0, 4);
+            }
+            //puts labels into array from sym file
+            for (int i = 0; i < labelVector.size(); i++) {
+                labelArr[i] = labelVector[i].substr(4, 6);
+            }
+
+            //if an address for an instruction already generated matches one found in sym file
+            // then set the label for that instruction to it;
+
+            //makes the address 4 digits to compare
+            //checks starting address against first label address to see if should replace starting address on end line
+            if (actualstartAddress.substr(2,4) == labelAddressArr[0]) {
+                actualstartAddress = labelArr[0];
+            }
+
             sicOutput << "         END     " + actualstartAddress<< endl;
             lisOutput << "                 END      " + actualstartAddress<< endl;
         }
