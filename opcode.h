@@ -1,3 +1,9 @@
+//DXE project CS 530 Spring 2020
+//Ben Forsberg, cssc1930
+//Marina Pestriacheva, cssc1907
+//Dante Colombo-Sadeghi, cssc1911
+
+
 #ifndef OPCODE_H
 #define    OPCODE_H
 
@@ -11,7 +17,6 @@ class Opcode {
 public:
     static int findOpcode(string value); //finds index of a opcode in opcode table
     static string getOpcode(string opcodes);
-    // static string getRegister(string registerHex);
     static string getInstruction(int optabIndex);
     static string getFormats(string opcode);
     static int hexToInt(string value);//takes a string of 2 (hex)charecters and returns int
