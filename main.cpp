@@ -792,9 +792,7 @@ int main(int argc, char *argv[]) {
                     //this if statement will change hex to decimal if operand is 3 charecters long 
                     if (operands[i].length() == 3) {
                         string hex3 = operands[i].substr(0,3); //this will be hex represenation of operand
-                        cout << "\n Hex represents " << hex3;
                         int hexOperandToInt = Opcode::hexToInt(hex3); //this trnslates hex string to int
-                        cout << "  decimal:" << hexOperandToInt;
                         operands[i] = to_string(hexOperandToInt); 
                         
                     }
