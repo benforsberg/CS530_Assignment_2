@@ -13,7 +13,7 @@ Files Included In Project:
 	data.obj
 	data.sym
 
-This project is hosted on Github at https://github.com/unknownsourcerer/CS530_Assignment_2
+This project is hosted on Github at https://github.com/benforsberg/CS530_Assignment_2
 
 File Breakdown:
 	-opcode.cpp: Contains the hardcoded opcode table, along several helper methods to retreive the opcode or its name. It also includes a few helper methods to convert data between hex, int, and binary.
